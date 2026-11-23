@@ -226,27 +226,17 @@ a{color:#6aa9e6}
     });
   }
 
-  // ---------- вход по сохранённому ключу: сразу в чат ----------
+  // ---------- открыть чат ----------
+  // Чат теперь живёт на постоянной странице GitHub Pages, а не на адресе туннеля:
+  // адрес моста меняется, а страница — нет. Страница сама найдёт живой мост
+  // и возьмёт вход по токену (или по ключу этого устройства).
   function enterChat(url) {
     var key = ls(KEYKEY);
-    if (!key) { location.href = 'accounts/'; return; }
-    var tm = timeout(12000);
-    fetch(url + '/__door/auth', {
-      method: 'POST', cache: 'no-store', signal: tm.signal,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ key: key })
-    }).then(function (r) { tm.done(); return r.json().catch(function () { return {}; }); })
-      .then(function (j) {
-        if (j && j.ok && j.ticket) {
-          if (j.user) lss(USERKEY, j.user);
-          location.href = url + '/?t=' + encodeURIComponent(j.ticket);
-          return;
-        }
-        // ключ больше не действует — на страницу входа
-        lsd(KEYKEY); lsd(USERKEY);
-        location.href = 'accounts/';
-      })
-      .catch(function () { location.href = 'accounts/'; });
+    if (!key && !ls('door.token')) {
+      location.href = 'accounts/?next=' + encodeURIComponent('/' + CHATPAGE);
+      return;
+    }
+    location.href = CHATPAGE;
   }
 
   // ---------- кто вошёл ----------
