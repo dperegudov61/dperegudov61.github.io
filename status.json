@@ -1,6 +1,1 @@
-{
-  "host": "",
-  "url": "",
-  "updated": "",
-  "note": "Обновляется окном «2. Сервер» (tunnel.ps1) — вручную этот файл править не нужно."
-}
+{"host":"localhost.run","url":"https://3e0c9d6f9351f3.app.lhr.life","connections":[{"host":"localhost.run","url":"https://3e0c9d6f9351f3.app.lhr.life","created":"2026-11-23T23:26:46+04:00"}],"updated":"2026-11-23T23:26:47+04:00"}
