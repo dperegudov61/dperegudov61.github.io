@@ -77,6 +77,8 @@ var RAW    = 'https://raw.githubusercontent.com/' + REPO + '/main/status.json';
 var LOCAL  = '/status.json';
 var KEY    = 'door.key';     // быстрый ключ этого устройства (вход без пароля)
 var URLKEY = 'door.url';     // последний адрес сервера, который ответил
+var DOOR   = 'https://dperegudov61.github.io';
+var CHAT   = DOOR + '/AI-Human-Messenger/';   // постоянный адрес страницы чата
 
 var $ = function(id){ return document.getElementById(id); };
 var state = { url:'', online:false };
@@ -266,8 +268,22 @@ function doorAuth(url, payload){
   });
 }
 
+// Куда вернуться после входа: ?next=<адрес>. Пускаем только на свой сайт.
+function nextUrl(){
+  var m = /[?&]next=([^&]+)/.exec(location.search);
+  if (!m) return '';
+  var u = '';
+  try { u = decodeURIComponent(m[1]); } catch(e) { return ''; }
+  if (u.indexOf(DOOR + '/') !== 0 && u.indexOf('/') !== 0) return '';
+  return u;
+}
+
 function enter(url, ticket){
-  location.replace(url + '/?t=' + encodeURIComponent(ticket));
+  // Билет нужен только серверной странице (/\?t=…). Чат на GitHub Pages живёт
+  // без cookie: он берёт токен из localStorage — он там уже есть после входа.
+  var nx = nextUrl();
+  if (nx) { location.replace(nx); return; }
+  location.replace(CHAT);
 }
 
 // ---------- вход по личной ссылке: /accounts/<ключ> ----------
