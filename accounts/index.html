@@ -129,7 +129,25 @@ function statusFrom(r){
   if (typeof j.content === 'string' && j.encoding === 'base64') {
     try { j = JSON.parse(b64ToText(j.content)); } catch(e) { return null; }
   }
-  return (typeof j.url === 'string') ? j : null;
+  return (j && (typeof j.url === 'string' || j.connections)) ? j : null;
+}
+
+// В status.json теперь список мостов: connections [{url,created}].
+// Возвращаем {url, updated}: свежие — первыми, старше STALE_MIN минут — в конец.
+var STALE_MIN = 60;
+function connsOf(j){
+  var out = [], arr = j && j.connections, i;
+  if (Object.prototype.toString.call(arr) === '[object Array]'){
+    for (i = 0; i < arr.length; i++){
+      var c = arr[i] || {};
+      if (typeof c.url !== 'string' || !c.url) continue;
+      out.push({ url: c.url.replace(/\/+$/, ''), updated: Date.parse(c.created || '') || 0 });
+    }
+  }
+  if (!out.length && j && typeof j.url === 'string' && j.url){
+    out.push({ url: j.url.replace(/\/+$/, ''), updated: Date.parse(j.updated || '') || 0 });
+  }
+  return out;
 }
 
 // все известные адреса, самый свежий — первым
@@ -141,16 +159,22 @@ function statusList(){
     { src:'raw',   p: fetchJSON(RAW + bust, null, 7000) }
   ];
   return Promise.all(reqs.map(function(x){ return x.p; })).then(function(res){
-    var out = [], i;
+    var out = [], i, k, seen = {};
     for (i = 0; i < res.length; i++) {
-      var j = statusFrom(res[i]);
-      if (!j || !j.url) continue;
-      out.push({ url: j.url.replace(/\/+$/, ''), updated: Date.parse(j.updated || '') || 0 });
+      var list = connsOf(statusFrom(res[i]));
+      for (k = 0; k < list.length; k++) {
+        if (seen[list[k].url]) { if (list[k].updated > seen[list[k].url].updated) seen[list[k].url].updated = list[k].updated; continue; }
+        seen[list[k].url] = list[k];
+      }
     }
-    out.sort(function(a, b){ return b.updated - a.updated; });
+    for (var u in seen) if (Object.prototype.hasOwnProperty.call(seen, u)) out.push(seen[u]);
     var mem = ls(URLKEY);
-    if (mem && !out.some(function(x){ return x.url === mem; })) out.push({ url: mem, updated: -1 });
-    return out;
+    if (mem && !seen[mem]) out.push({ url: mem, updated: -1 });
+    var now = Date.now();
+    out.sort(function(a, b){ return b.updated - a.updated; });
+    var fresh = out.filter(function(x){ return x.updated <= 0 || (now - x.updated) / 60000 <= STALE_MIN; });
+    var stale = out.filter(function(x){ return x.updated > 0 && (now - x.updated) / 60000 > STALE_MIN; });
+    return fresh.concat(stale);
   });
 }
 
@@ -235,8 +259,10 @@ function doorAuth(url, payload){
     body: JSON.stringify(payload)
   }, 20000).then(function(r){
     var j = r.json || {};
+    // токен пригодится страницам на этом же сайте: чат шлёт его в Authorization
+    if (r.ok && j.ok && j.token) { lss('door.token', j.token); lss('door.token.server', url); }
     return { code:r.status, ok: !!(r.ok && j.ok), error: j.error || '',
-             key: j.key || '', ticket: j.ticket || '', user: j.user || '' };
+             key: j.key || '', ticket: j.ticket || '', user: j.user || '', token: j.token || '' };
   });
 }
 
