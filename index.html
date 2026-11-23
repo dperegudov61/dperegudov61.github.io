@@ -2,15 +2,23 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Перегудов Дмитрий Владимирович — страница проектов</title>
 <meta name="description" content="Личная страница проектов Перегудова Дмитрия Владимировича: локальный AI-чат и другие проекты.">
 <meta name="theme-color" content="#101317">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Проекты">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#101317;color:#e3e7ec;
   font:15px/1.6 -apple-system,'Segoe UI',Roboto,system-ui,sans-serif;-webkit-text-size-adjust:100%}
-.wrap{max-width:720px;margin:0 auto;padding:44px 18px 56px}
+.wrap{max-width:720px;margin:0 auto;padding:44px 18px 56px;
+  padding-top:calc(44px + env(safe-area-inset-top));padding-bottom:calc(56px + env(safe-area-inset-bottom))}
 h1{margin:0 0 4px;font-size:26px;letter-spacing:-.3px;line-height:1.25}
 .role{color:#7d8794;font-size:14px;margin:0 0 26px}
 .sec{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#69737f;margin:0 0 12px}
@@ -20,9 +28,12 @@ h1{margin:0 0 4px;font-size:26px;letter-spacing:-.3px;line-height:1.25}
 .card .t{font-size:17px;font-weight:600;letter-spacing:-.2px;margin:0 0 5px;display:flex;align-items:center;gap:8px}
 .card .d{color:#8c96a3;font-size:13.5px;margin:0 0 12px}
 .go{display:inline-block;padding:9px 15px;border-radius:10px;background:#2f7fd0;color:#fff;
-  font-size:13.5px;font-weight:600}
+  font-size:13.5px;font-weight:600;border:0;cursor:pointer}
 .dot{width:8px;height:8px;border-radius:50%;background:#3fbf7f;box-shadow:0 0 0 3px rgba(63,191,127,.16);flex:0 0 auto}
 .dot.grey{background:#5a6470;box-shadow:0 0 0 3px rgba(90,100,112,.16)}
+#inst{display:block}
+#inst .hint{color:#8c96a3;font-size:13px;margin:10px 0 0;display:none}
+#inst .hint.on{display:block}
 .foot{margin-top:28px;padding-top:16px;border-top:1px solid #222831;color:#69737f;font-size:12.5px;line-height:1.7}
 .foot a{color:#8b93a0}
 a{color:#6aa9e6}
@@ -48,10 +59,46 @@ a{color:#6aa9e6}
     <span class="go" style="background:#2b323c">Смотреть код</span>
   </a>
 
+  <div class="card" id="inst" hidden>
+    <div class="t"><span class="dot grey"></span>Приложение</div>
+    <div class="d">Эта страница ставится на телефон как обычное приложение — со своей иконкой
+      и без адресной строки браузера.</div>
+    <button class="go" id="instbtn" type="button">Установить на Android</button>
+    <p class="hint" id="insthint">Откройте меню Chrome <b>⋮</b> и выберите
+      «Установить приложение» (или «Добавить на главный экран»).</p>
+  </div>
+
   <div class="foot">
     GitHub: <a href="https://github.com/dperegudov61">@dperegudov61</a><br>
     Страница входа в AI-чат: <a href="https://dperegudov61.github.io/AI-bot-chat/">dperegudov61.github.io/AI-bot-chat</a>
   </div>
 </div>
+
+<script>
+(function () {
+  var box   = document.getElementById('inst');
+  var btn   = document.getElementById('instbtn');
+  var hint  = document.getElementById('insthint');
+  var standalone = window.matchMedia('(display-mode: standalone)').matches ||
+                   window.navigator.standalone === true;
+  if (standalone) return;           // уже запущено как приложение — кнопка не нужна
+  box.hidden = false;
+
+  var deferred = null;
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    deferred = e;
+  });
+  btn.addEventListener('click', function () {
+    if (deferred) {
+      deferred.prompt();
+      deferred = null;
+      return;
+    }
+    // браузер не предложил установку сам — показываем, где её искать
+    hint.className = 'hint on';
+  });
+})();
+</script>
 </body>
 </html>
