@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Перегудов Дмитрий Владимирович — страница проектов</title>
-<meta name="description" content="Личная страница проектов Перегудова Дмитрия Владимировича: локальный AI-чат и другие проекты.">
+<meta name="description" content="Личная страница проектов Перегудова Дмитрия Владимировича: локальный AI and Human Messenger и другие проекты.">
 <meta name="theme-color" content="#101317">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
@@ -19,18 +19,33 @@ body{margin:0;background:#101317;color:#e3e7ec;
   font:15px/1.6 -apple-system,'Segoe UI',Roboto,system-ui,sans-serif;-webkit-text-size-adjust:100%}
 .wrap{max-width:720px;margin:0 auto;padding:44px 18px 56px;
   padding-top:calc(44px + env(safe-area-inset-top));padding-bottom:calc(56px + env(safe-area-inset-bottom))}
+.top{display:flex;align-items:flex-start;gap:12px;margin-bottom:26px}
+.top .l{flex:1 1 auto;min-width:0}
 h1{margin:0 0 4px;font-size:26px;letter-spacing:-.3px;line-height:1.25}
-.role{color:#7d8794;font-size:14px;margin:0 0 26px}
+.role{color:#7d8794;font-size:14px;margin:0}
+.who{flex:0 0 auto;margin-top:2px}
+.who .name{display:inline-block;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:13.5px;font-weight:600;color:#e3e7ec;background:#1b2027;border:1px solid #2b323c;border-radius:10px;
+  padding:7px 11px;text-decoration:none}
+.who .name:hover{border-color:#3a5a7d}
+.who .name .dot{margin-right:7px;vertical-align:1px}
 .sec{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#69737f;margin:0 0 12px}
 .card{display:block;text-decoration:none;color:inherit;background:#181c22;border:1px solid #262c35;
   border-radius:16px;padding:18px 18px 16px;margin:0 0 12px;transition:border-color .15s,transform .15s}
 .card:hover{border-color:#3a5a7d;transform:translateY(-1px)}
+.card.off:hover{border-color:#262c35;transform:none}
 .card .t{font-size:17px;font-weight:600;letter-spacing:-.2px;margin:0 0 5px;display:flex;align-items:center;gap:8px}
 .card .d{color:#8c96a3;font-size:13.5px;margin:0 0 12px}
 .go{display:inline-block;padding:9px 15px;border-radius:10px;background:#2f7fd0;color:#fff;
-  font-size:13.5px;font-weight:600;border:0;cursor:pointer}
-.dot{width:8px;height:8px;border-radius:50%;background:#3fbf7f;box-shadow:0 0 0 3px rgba(63,191,127,.16);flex:0 0 auto}
-.dot.grey{background:#5a6470;box-shadow:0 0 0 3px rgba(90,100,112,.16)}
+  font-size:13.5px;font-weight:600;border:0;cursor:pointer;font-family:inherit}
+.go:hover{background:#3a8de0}
+.go.ghost{background:#2b323c}
+.go.ghost:hover{background:#333b47}
+.go:disabled,.go[aria-disabled="true"]{opacity:.45;cursor:default;background:#39414d}
+.dot{width:8px;height:8px;border-radius:50%;background:#5a6470;box-shadow:0 0 0 3px rgba(90,100,112,.16);flex:0 0 auto}
+.dot.on{background:#3fbf7f;box-shadow:0 0 0 3px rgba(63,191,127,.16)}
+.dot.off{background:#c0575f;box-shadow:0 0 0 3px rgba(192,87,95,.16)}
+.state{font-size:12.5px;color:#8c96a3;margin:0 0 12px;min-height:17px}
 #inst{display:block}
 #inst .hint{color:#8c96a3;font-size:13px;margin:10px 0 0;display:none}
 #inst .hint.on{display:block}
@@ -41,26 +56,32 @@ a{color:#6aa9e6}
 </head>
 <body>
 <div class="wrap">
-  <h1>Перегудов Дмитрий Владимирович</h1>
-  <p class="role">Страница проектов</p>
+  <div class="top">
+    <div class="l">
+      <h1>Перегудов Дмитрий Владимирович</h1>
+      <p class="role">Страница проектов</p>
+    </div>
+    <div class="who" id="who"></div>
+  </div>
 
   <p class="sec">Проекты</p>
 
-  <a class="card" href="https://dperegudov61.github.io/AI-Human-Messenger/">
-    <div class="t"><span class="dot"></span>AI-чат</div>
+  <div class="card" id="chatcard">
+    <div class="t"><span class="dot" id="dot"></span>AI and Human Messenger</div>
     <div class="d">Локальный ИИ на домашнем компьютере: чат с языковыми моделями и генерация картинок.
-      Здесь — страница входа по постоянному адресу. Сам чат работает, пока включён ПК.</div>
-    <span class="go">Открыть страницу входа</span>
-  </a>
+      Чат работает, пока включён ПК.</div>
+    <p class="state" id="state">проверяю сервер…</p>
+    <button class="go" id="chatbtn" type="button" aria-disabled="true" disabled>Открыть чат</button>
+  </div>
 
   <a class="card" href="https://github.com/dperegudov61/praktik">
-    <div class="t"><span class="dot grey"></span>praktik</div>
+    <div class="t"><span class="dot"></span>praktik</div>
     <div class="d">Репозиторий проекта на GitHub.</div>
-    <span class="go" style="background:#2b323c">Смотреть код</span>
+    <span class="go ghost">Смотреть код</span>
   </a>
 
   <div class="card" id="inst" hidden>
-    <div class="t"><span class="dot grey"></span>Приложение</div>
+    <div class="t"><span class="dot"></span>Приложение</div>
     <div class="d">Эта страница ставится на телефон как обычное приложение — со своей иконкой
       и без адресной строки браузера.</div>
     <button class="go" id="instbtn" type="button">Установить на Android</button>
@@ -70,34 +91,221 @@ a{color:#6aa9e6}
 
   <div class="foot">
     GitHub: <a href="https://github.com/dperegudov61">@dperegudov61</a><br>
-    Страница входа в AI-чат: <a href="https://dperegudov61.github.io/AI-Human-Messenger/">dperegudov61.github.io/AI-Human-Messenger</a>
+    Вход и регистрация: <a href="accounts/">dperegudov61.github.io/accounts</a>
   </div>
 </div>
 
 <script>
 (function () {
-  var box   = document.getElementById('inst');
-  var btn   = document.getElementById('instbtn');
-  var hint  = document.getElementById('insthint');
-  var standalone = window.matchMedia('(display-mode: standalone)').matches ||
-                   window.navigator.standalone === true;
-  if (standalone) return;           // уже запущено как приложение — кнопка не нужна
-  box.hidden = false;
+  'use strict';
 
-  var deferred = null;
-  window.addEventListener('beforeinstallprompt', function (e) {
-    e.preventDefault();
-    deferred = e;
-  });
-  btn.addEventListener('click', function () {
-    if (deferred) {
-      deferred.prompt();
-      deferred = null;
-      return;
+  // ---------- что помним на этом устройстве ----------
+  // Всё лежит в localStorage одного и того же адреса (dperegudov61.github.io),
+  // поэтому главная, /accounts/ и страница чата видят одно и то же.
+  var KEYKEY  = 'door.key';    // ключ устройства (вход без пароля)
+  var USERKEY = 'door.user';   // имя вошедшего
+  var URLKEY  = 'door.url';    // последний адрес сервера, который ответил
+  var CHATPAGE = 'AI-Human-Messenger/';   // постоянный адрес страницы чата
+
+  var $ = function (id) { return document.getElementById(id); };
+  function ls(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }
+  function lss(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function lsd(k) { try { localStorage.removeItem(k); } catch (e) {} }
+
+  var state = { url: '', online: false };
+
+  // ---------- адрес сервера: status.json в этом же репозитории ----------
+  var REPO = 'dperegudov61/dperegudov61.github.io';
+  var API  = 'https://api.github.com/repos/' + REPO + '/contents/status.json';
+  var RAW  = 'https://raw.githubusercontent.com/' + REPO + '/main/status.json';
+
+  function timeout(ms) {
+    var ctl = new AbortController();
+    var t = setTimeout(function () { try { ctl.abort(); } catch (e) {} }, ms);
+    return { signal: ctl.signal, done: function () { clearTimeout(t); } };
+  }
+  function fetchJSON(url, opt, ms) {
+    var tm = timeout(ms || 6000);
+    return fetch(url, Object.assign({ cache: 'no-store', signal: tm.signal }, opt || {}))
+      .then(function (r) {
+        tm.done();
+        return r.text().then(function (txt) {
+          var j = {};
+          try { j = JSON.parse(txt || '{}'); } catch (e) {}
+          return { status: r.status, ok: r.ok, json: j };
+        });
+      })
+      .catch(function () { tm.done(); return { status: 0, ok: false, json: {} }; });
+  }
+  function b64ToText(b64) {
+    var bin = atob(b64.replace(/\s/g, '')), n = bin.length, bytes = new Uint8Array(n), i;
+    for (i = 0; i < n; i++) bytes[i] = bin.charCodeAt(i);
+    if (window.TextDecoder) return new TextDecoder('utf-8').decode(bytes);
+    var s = '';
+    for (i = 0; i < n; i++) s += String.fromCharCode(bytes[i]);
+    return decodeURIComponent(escape(s));
+  }
+  // api.github.com отдаёт файл в base64 (и своё поле url — его не спутать с адресом сервера)
+  function statusFrom(r) {
+    if (!r || !r.ok) return null;
+    var j = r.json || {};
+    if (typeof j.content === 'string' && j.encoding === 'base64') {
+      try { j = JSON.parse(b64ToText(j.content)); } catch (e) { return null; }
     }
-    // браузер не предложил установку сам — показываем, где её искать
-    hint.className = 'hint on';
+    return (typeof j.url === 'string') ? j : null;
+  }
+  function statusList() {
+    var bust = '?v=' + Date.now();
+    var reqs = [
+      fetchJSON('status.json' + bust, null, 5000),
+      fetchJSON(RAW + bust, null, 6000),
+      fetchJSON(API, { headers: { 'Accept': 'application/vnd.github+json' } }, 6000)
+    ];
+    return Promise.all(reqs).then(function (res) {
+      var out = [], i;
+      for (i = 0; i < res.length; i++) {
+        var j = statusFrom(res[i]);
+        if (!j || !j.url) continue;
+        var u = j.url.replace(/\/+$/, '');
+        if (!out.some(function (x) { return x.url === u; })) out.push({ url: u });
+      }
+      var mem = ls(URLKEY);
+      if (mem && !out.some(function (x) { return x.url === mem; })) out.push({ url: mem });
+      return out;
+    });
+  }
+  function ping(url) {
+    if (!url) return Promise.resolve(false);
+    return fetchJSON(url + '/__door/hi', null, 5000).then(function (r) {
+      return !!(r.ok && r.json && r.json.ok === true);
+    });
+  }
+  // первый адрес, который ответил «я на связи»
+  function findLive() {
+    var mem = ls(URLKEY);
+    var quick = mem ? [mem] : [];
+    var slow = statusList().then(function (list) { return list.map(function (x) { return x.url; }); });
+    return new Promise(function (resolve) {
+      var done = false, pending = 2;
+      function hit(u) {
+        if (done) return;
+        if (u) { done = true; resolve(u); return; }
+        if (--pending === 0) { done = true; resolve(''); }
+      }
+      Promise.all(quick.map(ping)).then(function (oks) {
+        hit(quick.filter(function (u, i) { return oks[i]; })[0] || '');
+      });
+      slow.then(function (urls) {
+        return Promise.all(urls.map(ping)).then(function (oks) {
+          return urls.filter(function (u, i) { return oks[i]; })[0] || '';
+        });
+      }).then(hit);
+    });
+  }
+
+  // ---------- вход по сохранённому ключу: сразу в чат ----------
+  function enterChat(url) {
+    var key = ls(KEYKEY);
+    if (!key) { location.href = 'accounts/'; return; }
+    var tm = timeout(12000);
+    fetch(url + '/__door/auth', {
+      method: 'POST', cache: 'no-store', signal: tm.signal,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: key })
+    }).then(function (r) { tm.done(); return r.json().catch(function () { return {}; }); })
+      .then(function (j) {
+        if (j && j.ok && j.ticket) {
+          if (j.user) lss(USERKEY, j.user);
+          location.href = url + '/?t=' + encodeURIComponent(j.ticket);
+          return;
+        }
+        // ключ больше не действует — на страницу входа
+        lsd(KEYKEY); lsd(USERKEY);
+        location.href = 'accounts/';
+      })
+      .catch(function () { location.href = 'accounts/'; });
+  }
+
+  // ---------- кто вошёл ----------
+  function renderWho() {
+    var user = ls(USERKEY), key = ls(KEYKEY);
+    var box = $('who');
+    if (user || key) {
+      var a = document.createElement('a');
+      a.className = 'name';
+      a.href = 'accounts/';
+      a.title = 'аккаунт';
+      if (!state.online) a.setAttribute('aria-disabled', 'true');
+      var d = document.createElement('span');
+      d.className = 'dot ' + (state.online ? 'on' : 'off');
+      a.appendChild(d);
+      a.appendChild(document.createTextNode(user || 'вход выполнен'));
+      box.innerHTML = '';
+      box.appendChild(a);
+    } else {
+      var b = document.createElement('a');
+      b.className = 'go ghost';
+      b.href = 'accounts/';
+      b.textContent = 'Войти';
+      if (!state.online) { b.setAttribute('aria-disabled', 'true'); b.style.pointerEvents = 'none'; b.style.opacity = '.45'; }
+      box.innerHTML = '';
+      box.appendChild(b);
+    }
+  }
+
+  // ---------- состояние сервера ----------
+  function renderState() {
+    var dot = $('dot'), st = $('state'), btn = $('chatbtn'), card = $('chatcard');
+    dot.className = 'dot ' + (state.online ? 'on' : 'off');
+    if (state.online) {
+      st.textContent = 'сервер на связи';
+      card.className = 'card';
+      btn.disabled = false; btn.removeAttribute('aria-disabled');
+    } else {
+      st.textContent = 'сервер не отвечает — включите ПК (окно «2. Сервер»)';
+      card.className = 'card off';
+      btn.disabled = true; btn.setAttribute('aria-disabled', 'true');
+    }
+    renderWho();
+  }
+
+  function refresh() {
+    return findLive().then(function (url) {
+      state.url = url; state.online = !!url;
+      if (url) lss(URLKEY, url);
+      renderState();
+      return url;
+    });
+  }
+
+  $('chatbtn').addEventListener('click', function () {
+    if (!state.online) return;
+    enterChat(state.url);
   });
+
+  // вход по личной ссылке, если её зачем-то открыли на главной: /<ключ>
+  $('chatcard').addEventListener('click', function (e) {
+    if (e.target === $('chatbtn')) e.stopPropagation();
+  });
+
+  // ---------- установка как приложение ----------
+  (function () {
+    var box = $('inst'), btn = $('instbtn'), hint = $('insthint');
+    var standalone = window.matchMedia('(display-mode: standalone)').matches ||
+                     window.navigator.standalone === true;
+    if (standalone) return;
+    box.hidden = false;
+    var deferred = null;
+    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; });
+    btn.addEventListener('click', function () {
+      if (deferred) { deferred.prompt(); deferred = null; return; }
+      hint.className = 'hint on';
+    });
+  })();
+
+  renderState();
+  refresh();
+  setInterval(refresh, 30000);   // раз в полминуты проверяем сервер заново
 })();
 </script>
 </body>
