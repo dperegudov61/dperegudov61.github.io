@@ -152,7 +152,24 @@ a{color:#6aa9e6}
     if (typeof j.content === 'string' && j.encoding === 'base64') {
       try { j = JSON.parse(b64ToText(j.content)); } catch (e) { return null; }
     }
-    return (typeof j.url === 'string') ? j : null;
+    return (j && (typeof j.url === 'string' || j.connections)) ? j : null;
+  }
+  // В status.json лежит список мостов: connections [{url,created}]. Свежие — первыми,
+  // те, что старше STALE_MIN минут, уходят в конец: они скорее упадут.
+  var STALE_MIN = 60;
+  function connsOf(j) {
+    var out = [], arr = j && j.connections, i;
+    if (Object.prototype.toString.call(arr) === '[object Array]') {
+      for (i = 0; i < arr.length; i++) {
+        var c = arr[i] || {};
+        if (typeof c.url !== 'string' || !c.url) continue;
+        out.push({ url: c.url.replace(/\/+$/, ''), created: Date.parse(c.created || '') || 0 });
+      }
+    }
+    if (!out.length && j && typeof j.url === 'string' && j.url) {
+      out.push({ url: j.url.replace(/\/+$/, ''), created: Date.parse(j.updated || '') || 0 });
+    }
+    return out;
   }
   function statusList() {
     var bust = '?v=' + Date.now();
@@ -162,16 +179,22 @@ a{color:#6aa9e6}
       fetchJSON(API, { headers: { 'Accept': 'application/vnd.github+json' } }, 6000)
     ];
     return Promise.all(reqs).then(function (res) {
-      var out = [], i;
+      var out = [], i, k, seen = {};
       for (i = 0; i < res.length; i++) {
-        var j = statusFrom(res[i]);
-        if (!j || !j.url) continue;
-        var u = j.url.replace(/\/+$/, '');
-        if (!out.some(function (x) { return x.url === u; })) out.push({ url: u });
+        var list = connsOf(statusFrom(res[i]));
+        for (k = 0; k < list.length; k++) {
+          if (seen[list[k].url]) { if (list[k].created > seen[list[k].url].created) seen[list[k].url].created = list[k].created; continue; }
+          seen[list[k].url] = list[k];
+        }
       }
+      for (var u in seen) if (Object.prototype.hasOwnProperty.call(seen, u)) out.push(seen[u]);
       var mem = ls(URLKEY);
-      if (mem && !out.some(function (x) { return x.url === mem; })) out.push({ url: mem });
-      return out;
+      if (mem && !seen[mem]) out.push({ url: mem, created: 0 });
+      var now = Date.now();
+      out.sort(function (a, b) { return b.created - a.created; });
+      var fresh = out.filter(function (x) { return !x.created || (now - x.created) / 60000 <= STALE_MIN; });
+      var stale = out.filter(function (x) { return x.created && (now - x.created) / 60000 > STALE_MIN; });
+      return fresh.concat(stale).map(function (x) { return { url: x.url, stale: stale.indexOf(x) >= 0 }; });
     });
   }
   function ping(url) {
@@ -274,8 +297,22 @@ a{color:#6aa9e6}
       state.url = url; state.online = !!url;
       if (url) lss(URLKEY, url);
       renderState();
+      if (url) verifyMe(url);
       return url;
     });
+  }
+
+  // проверка, что сохранённый вход ещё действует: токен шлём в Authorization
+  function verifyMe(url) {
+    var tok = ls('door.token');
+    if (!tok) { if (ls(USERKEY)) { lsd(USERKEY); } renderWho(); return; }
+    fetchJSON(url + '/__door/me', { headers: { 'Authorization': 'Bearer ' + tok } }, 6000)
+      .then(function (r) {
+        var j = r.json || {};
+        if (j.ok && j.user) { lss(USERKEY, j.user); }
+        else if (r.status === 200 && !j.ok) { lsd(USERKEY); lsd('door.token'); }
+        renderWho();
+      });
   }
 
   $('chatbtn').addEventListener('click', function () {
