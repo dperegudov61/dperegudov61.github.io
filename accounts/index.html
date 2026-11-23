@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Вход · AI and Human Messenger</title>
+<style>
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:#101317;color:#e3e7ec;font:15px/1.5 -apple-system,'Segoe UI',Roboto,system-ui,sans-serif;
+  display:flex;align-items:center;justify-content:center;padding:18px;-webkit-text-size-adjust:100%}
+.card{width:100%;max-width:390px;background:#181c22;border:1px solid #262c35;border-radius:16px;padding:22px 20px 18px;
+  box-shadow:0 18px 50px rgba(0,0,0,.45)}
+h1{margin:0 0 2px;font-size:20px;letter-spacing:-.2px}
+.sub{color:#7d8794;font-size:13px;margin-bottom:16px}
+.st{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#8c96a3;margin-bottom:14px;min-height:18px}
+.dot{width:8px;height:8px;border-radius:50%;background:#5a6470;flex:0 0 auto}
+.dot.on{background:#3fbf7f;box-shadow:0 0 0 3px rgba(63,191,127,.16)}
+.dot.off{background:#c0575f;box-shadow:0 0 0 3px rgba(192,87,95,.16)}
+label{display:block;font-size:12.5px;color:#8c96a3;margin:0 0 5px}
+input[type=text],input[type=password]{width:100%;padding:12px;margin-bottom:12px;border-radius:11px;border:1px solid #2b323c;
+  background:#0d1014;color:#e3e7ec;font:inherit;outline:none}
+input[type=text]:focus,input[type=password]:focus{border-color:#4a8fd8}
+.rem{display:flex;align-items:center;gap:9px;color:#8c96a3;font-size:13px;margin:0 0 12px;cursor:pointer;user-select:none}
+.rem input{width:17px;height:17px;margin:0;accent-color:#3f8ee0}
+button{width:100%;padding:13px;border:0;border-radius:11px;background:#2f7fd0;color:#fff;font:inherit;font-weight:600;
+  cursor:pointer;transition:background .15s}
+button:hover{background:#3a8de0}
+button:disabled{opacity:.55;cursor:default}
+.err{color:#e88b92;font-size:13px;min-height:20px;margin:10px 0 4px}
+.ok{color:#7fd3a5;font-size:13px;min-height:20px;margin:10px 0 4px}
+.foot{margin-top:14px;padding-top:13px;border-top:1px solid #222831;color:#69737f;font-size:11.5px;line-height:1.6}
+.foot a{color:#8b93a0}
+.hint{color:#69737f;font-size:11.5px;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>AI-чат</h1>
+  <div class="sub">Вход в AI and Human Messenger. Сам чат работает на домашнем ПК.</div>
+
+  <div class="st"><span class="dot" id="dot"></span><span id="stext">проверяю сервер…</span></div>
+
+  <form id="f" autocomplete="on">
+    <label for="u">Имя</label>
+    <input id="u" type="text" name="username" autocomplete="username" maxlength="24" autocapitalize="none" spellcheck="false">
+    <label for="p">Пароль</label>
+    <input id="p" type="password" name="password" autocomplete="current-password">
+    <label class="rem"><input type="checkbox" id="rm" checked> запомнить это устройство</label>
+    <button id="go" type="submit">Войти</button>
+  </form>
+
+  <div class="err" id="err"></div>
+  <div class="ok" id="okmsg"></div>
+
+  <div class="foot">
+    Вход выдаёт владелец сервера — новых пользователей здесь не создают.<br>
+    Если сервер выключен, страница об этом скажет: включите окно «2. Сервер» на ПК.<br>
+    <a href="#" id="forget" style="display:none">забыть это устройство</a>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+// ---------- где искать адрес сервера ----------
+// Адрес туннеля меняется при каждом перезапуске, поэтому его источники проверяются
+// все сразу и берётся самый свежий: API GitHub отдаёт файл без задержки кэша,
+// Pages/raw — с задержкой в десятки секунд, память устройства — на случай, если
+// ничего не ответило.
+var REPO   = 'dperegudov61/dperegudov61.github.io';
+var API    = 'https://api.github.com/repos/' + REPO + '/contents/status.json';
+var RAW    = 'https://raw.githubusercontent.com/' + REPO + '/main/status.json';
+var LOCAL  = '/status.json';
+var KEY    = 'door.key';     // быстрый ключ этого устройства (вход без пароля)
+var URLKEY = 'door.url';     // последний адрес сервера, который ответил
+
+var $ = function(id){ return document.getElementById(id); };
+var state = { url:'', online:false };
+
+function setState(cls, text){
+  $('dot').className = 'dot' + (cls ? ' ' + cls : '');
+  $('stext').textContent = text;
+}
+function err(t){ $('err').textContent = t || ''; $('okmsg').textContent = ''; }
+function ok(t){ $('okmsg').textContent = t || ''; $('err').textContent = ''; }
+
+function ls(k){ try { return localStorage.getItem(k) || ''; } catch(e){ return ''; } }
+function lss(k,v){ try { localStorage.setItem(k, v); } catch(e){} }
+function lsd(k){ try { localStorage.removeItem(k); } catch(e){} }
+function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+// ---------- сервисные запросы ----------
+function timeout(ms){
+  var ctl = new AbortController();
+  var t = setTimeout(function(){ ctl.abort(); }, ms);
+  return { signal: ctl.signal, done: function(){ clearTimeout(t); } };
+}
+
+function fetchJSON(url, opt, ms){
+  var tm = timeout(ms || 8000);
+  return fetch(url, Object.assign({ cache:'no-store', signal: tm.signal }, opt || {}))
+    .then(function(r){ tm.done(); return r.text().then(function(txt){
+      var j = {};
+      try { j = JSON.parse(txt || '{}'); } catch(e) {}
+      return { status:r.status, ok:r.ok, json:j };
+    }); })
+    .catch(function(){ tm.done(); return { status:0, ok:false, json:{} }; });
+}
+
+function b64ToText(b64){
+  var bin = atob(b64.replace(/\s/g,''));
+  var n = bin.length, bytes = new Uint8Array(n), i;
+  for (i = 0; i < n; i++) bytes[i] = bin.charCodeAt(i);
+  if (window.TextDecoder) return new TextDecoder('utf-8').decode(bytes);
+  var s = '';
+  for (i = 0; i < n; i++) s += String.fromCharCode(bytes[i]);
+  return decodeURIComponent(escape(s));
+}
+
+// api.github.com отдаёт файл в base64 (и своё поле url — его не спутать с адресом
+// сервера), Pages и raw — как есть
+function statusFrom(r){
+  if (!r || !r.ok) return null;
+  var j = r.json || {};
+  if (typeof j.content === 'string' && j.encoding === 'base64') {
+    try { j = JSON.parse(b64ToText(j.content)); } catch(e) { return null; }
+  }
+  return (typeof j.url === 'string') ? j : null;
+}
+
+// все известные адреса, самый свежий — первым
+function statusList(){
+  var bust = '?v=' + Date.now();
+  var reqs = [
+    { src:'api',   p: fetchJSON(API, { headers:{ 'Accept':'application/vnd.github+json' } }, 7000) },
+    { src:'pages', p: fetchJSON(LOCAL + bust, null, 5000) },
+    { src:'raw',   p: fetchJSON(RAW + bust, null, 7000) }
+  ];
+  return Promise.all(reqs.map(function(x){ return x.p; })).then(function(res){
+    var out = [], i;
+    for (i = 0; i < res.length; i++) {
+      var j = statusFrom(res[i]);
+      if (!j || !j.url) continue;
+      out.push({ url: j.url.replace(/\/+$/, ''), updated: Date.parse(j.updated || '') || 0 });
+    }
+    out.sort(function(a, b){ return b.updated - a.updated; });
+    var mem = ls(URLKEY);
+    if (mem && !out.some(function(x){ return x.url === mem; })) out.push({ url: mem, updated: -1 });
+    return out;
+  });
+}
+
+function ping(url){
+  if (!url) return Promise.resolve(false);
+  return fetchJSON(url + '/__door/hi', null, 6000).then(function(r){
+    return !!(r.ok && r.json && r.json.ok === true);
+  });
+}
+
+// подсказка из чата (?u=...): сама страница чата уже прочла status.json и знает адрес
+function hintUrl(){
+  var m=/[?&]u=([^&]+)/.exec(location.search);
+  if(!m)return '';
+  var u='';
+  try{ u=decodeURIComponent(m[1]); }catch(e){ return ''; }
+  u=u.replace(/\/+$/,'');
+  return /^https:\/\//.test(u) ? u : '';
+}
+
+// первый адрес, который согласился ответить
+function firstLive(urls){
+  return new Promise(function(resolve){
+    if (!urls.length) { resolve(''); return; }
+    var left = urls.length, done = false;
+    urls.forEach(function(u){
+      ping(u).then(function(alive){
+        left--;
+        if (alive && !done) { done = true; resolve(u); }
+        else if (left === 0 && !done) { done = true; resolve(''); }
+      });
+    });
+  });
+}
+
+// ищем живой адрес: сначала — подсказка из чата, затем запомненный,
+// параллельно — свежий из status.json
+function findLive(){
+  var mem = ls(URLKEY), hint = hintUrl();
+  var quick = [];
+  if (hint) quick.push(hint);
+  if (mem && mem !== hint) quick.push(mem);
+  var slow = statusList().then(function(list){
+    var urls = list.map(function(x){ return x.url; });
+    if (hint && urls.indexOf(hint) < 0) urls.unshift(hint);
+    return urls;
+  });
+  return new Promise(function(resolve){
+    var done = false, pending = 2;
+    function hit(u){
+      if (done) return;
+      if (u) { done = true; state.url = u; state.online = true; resolve(u); return; }
+      if (--pending === 0) { done = true; state.online = false; resolve(''); }
+    }
+    firstLive(quick).then(hit);
+    slow.then(firstLive).then(hit);
+  });
+}
+
+// «нет сервера» — это не приговор: дверь делает несколько попыток сама
+function withServer(attempt, fn, onFail){
+  return findLive().then(function(url){
+    if (!url) {
+      if (attempt < 3) {
+        setState('', 'сервер пока не отвечает — пробую ещё раз…');
+        return wait(2000).then(function(){ return withServer(attempt + 1, fn, onFail); });
+      }
+      setState('off', 'сервер не отвечает');
+      if (onFail) onFail();
+      return null;
+    }
+    lss(URLKEY, url);
+    setState('on', 'сервер на связи');
+    return fn(url);
+  });
+}
+
+function doorAuth(url, payload){
+  return fetchJSON(url + '/__door/auth', {
+    method:'POST',
+    headers:{ 'Content-Type':'application/json' },
+    body: JSON.stringify(payload)
+  }, 20000).then(function(r){
+    var j = r.json || {};
+    return { code:r.status, ok: !!(r.ok && j.ok), error: j.error || '',
+             key: j.key || '', ticket: j.ticket || '', user: j.user || '' };
+  });
+}
+
+function enter(url, ticket){
+  location.replace(url + '/?t=' + encodeURIComponent(ticket));
+}
+
+// ---------- вход по личной ссылке: /accounts/<ключ> ----------
+// GitHub Pages на неизвестный путь отдаёт 404.html (его кладёт publish_door.ps1 — это
+// копия страницы), поэтому страница загружается как обычно. Ключ забираем из пути
+// и сразу стираем из адреса: по истории браузера и в переслатых ссылках его быть не должно.
+var BASE = '/accounts/';
+function takeKeyFromPath(){
+  var p = location.pathname || '';
+  if (p.indexOf(BASE) === 0) p = p.slice(BASE.length);
+  else p = p.replace(/^\/+/, '');
+  p = p.replace(/\/+$/, '');
+  if (!p) return '';
+  var seg = p.split('/').pop();
+  if (!/^[0-9a-f]{40,120}$/i.test(seg)) return '';
+  lss(KEY, seg);
+  try { history.replaceState(null, '', BASE + (location.search || '')); } catch(e) {}
+  return seg;
+}
+
+// ---------- проверка сервера и «тихий» вход по ключу ----------
+function looksLikeKey(s){ return typeof s === 'string' && s.length >= 40; }
+
+function showForm(){
+  $('f').style.display = 'block';
+  setTimeout(function(){ try { $('u').focus(); } catch(e){} }, 60);
+}
+
+function boot(){
+  takeKeyFromPath();                     // ключ из личной ссылки важнее всего остального
+  if(/[?&]r=tunnel/.test(location.search)) err('связь пропала, сервер сменил адрес — входим заново');
+  var saved = ls(KEY);
+  if (saved && !looksLikeKey(saved)) { lsd(KEY); saved = ''; }
+
+  if (saved) {
+    $('forget').style.display = 'inline';
+    $('f').style.display = 'none';
+    setState('', 'вхожу по сохранённому ключу…');
+    withServer(0, function(url){
+      return doorAuth(url, { key: saved }).then(function(res){
+        if (res.ok && res.ticket) { lss('door.user', res.user || ''); enter(url, res.ticket); return; }
+        lsd(KEY);
+        $('forget').style.display = 'none';
+        showForm();
+        if (res.code === 401) err('сохранённый вход больше не действует — введите пароль');
+      });
+    }, function(){
+      showForm();
+      err('ПК сейчас выключен или туннель перезапускается — обновите страницу через полминуты');
+    });
+    return;
+  }
+
+  var lost=/[?&]r=tunnel/.test(location.search);
+  if(lost) err('связь пропала, а вход на этом устройстве не сохранён — введите имя и пароль');
+  withServer(0, function(){ return null; }, function(){
+    if(lost) err('сервер не отвечает — включите ПК (окно «2. Сервер») и обновите страницу');
+    else err('ПК сейчас выключен или туннель перезапускается — обновите страницу через полминуты');
+  });
+}
+
+// ---------- отправка формы ----------
+$('f').addEventListener('submit', function(e){
+  e.preventDefault();
+  var login = $('u').value.trim();
+  var pass = $('p').value;
+  var remember = !!$('rm').checked;
+  err(''); ok('');
+
+  if (!login) { err('введите имя'); $('u').focus(); return; }
+  if (!pass) { err('введите пароль'); $('p').focus(); return; }
+
+  var b = $('go');
+  b.disabled = true;
+  var was = b.textContent;
+  b.textContent = 'Проверяю…';
+
+  function stop(msg){
+    b.disabled = false; b.textContent = was;
+    if (msg) err(msg);
+    $('p').value = '';
+    $('p').focus();
+  }
+
+  withServer(0, function(url){
+    return doorAuth(url, { login: login, pass: pass, remember: remember }).then(function(res){
+      if (!res.ok) {
+        if (res.code === 401) stop(res.error || 'неверное имя или пароль');
+        else if (res.code === 403) stop('этот адрес сервера не разрешён — напишите владельцу');
+        else stop('связь оборвалась на полпути — нажмите «Войти» ещё раз');
+        return;
+      }
+      if (res.key) lss(KEY, res.key);
+      ok('вхожу как ' + (res.user || login) + '…');
+      enter(url, res.ticket);
+    });
+  }, function(){
+    stop('сервер не отвечает — включите окно «2. Сервер» на ПК');
+  });
+});
+
+$('forget').addEventListener('click', function(e){
+  e.preventDefault();
+  lsd(KEY);
+  $('forget').style.display = 'none';
+  $('okmsg').textContent = '';
+  showForm();
+  err('это устройство больше не помнит вход');
+  withServer(0, function(){ return null; }, null);
+});
+
+boot();
+})();
+</script>
+</body>
+</html>
