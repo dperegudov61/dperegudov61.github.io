@@ -148,6 +148,12 @@ function st(el, text, cls) {
   el.textContent = text || '';
 }
 
+// что показать, когда сервер не принял запрос
+function why(r, j) {
+  if (!r || r.status === 0) return 'связь оборвалась — нажмите ещё раз';
+  return (j && j.error) || ('не получилось (HTTP ' + r.status + ')');
+}
+
 // ---------- адрес сервера ----------
 function timeout(ms) {
   var ctl = new AbortController();
@@ -321,7 +327,7 @@ $('bname').onclick = function () {
   api('/__acc/name', { method: 'POST', body: JSON.stringify({ name: v }) }).then(function (r) {
     b.disabled = false;
     var j = r.json || {};
-    if (!r.ok || j.ok === false) { st(el, j.error || ('не получилось (HTTP ' + r.status + ')'), 'bad'); return; }
+    if (!r.ok || j.ok === false) { st(el, why(r, j), 'bad'); return; }
     me = j.name; myId = j.id || myId;
     lss('door.user', me);
     renderWho();
@@ -339,7 +345,7 @@ $('bpass').onclick = function () {
   api('/__acc/pass', { method: 'POST', body: JSON.stringify({ pass: p1, pass2: p2 }) }).then(function (r) {
     b.disabled = false;
     var j = r.json || {};
-    if (!r.ok || j.ok === false) { st(el, j.error || ('не получилось (HTTP ' + r.status + ')'), 'bad'); return; }
+    if (!r.ok || j.ok === false) { st(el, why(r, j), 'bad'); return; }
     if (j.token) { lss(TOK, j.token); tok = j.token; }
     lsd('door.key');           // старые ссылки погашены — ключ этого устройства тоже больше не нужен
     myPass = true;
@@ -387,7 +393,7 @@ $('bdel').onclick = function () {
   api('/__acc/delete', { method: 'POST', body: JSON.stringify({ pass: $('dp').value }) }).then(function (r) {
     b.disabled = false;
     var j = r.json || {};
-    if (!r.ok || j.ok === false) { st(el, j.error || ('не получилось (HTTP ' + r.status + ')'), 'bad'); return; }
+    if (!r.ok || j.ok === false) { st(el, why(r, j), 'bad'); return; }
     forgetAll();
     st(el, 'учётная запись удалена. Возвращаю на страницу входа…', 'ok');
     setTimeout(function () { location.replace(GH + '/accounts/'); }, 1500);
