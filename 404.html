@@ -327,10 +327,16 @@ function boot(){
     withServer(0, function(url){
       return doorAuth(url, { key: saved }).then(function(res){
         if (res.ok && res.ticket) { lss('door.user', res.user || ''); enter(url, res.ticket); return; }
-        lsd(KEY);
-        $('forget').style.display = 'none';
+        // Ключ стираем только при явном отказе сервера: при обрыве связи он ещё пригодится
+        if (res.code === 401 || res.code === 403) {
+          lsd(KEY);
+          $('forget').style.display = 'none';
+          showForm();
+          err('сохранённый вход больше не действует — введите пароль');
+          return;
+        }
         showForm();
-        if (res.code === 401) err('сохранённый вход больше не действует — введите пароль');
+        err('связь оборвалась на полпути — нажмите «Войти» или обновите страницу');
       });
     }, function(){
       showForm();
