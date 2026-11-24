@@ -74,6 +74,13 @@ a{color:#6aa9e6}
     <button class="go" id="chatbtn" type="button" aria-disabled="true" disabled>Открыть чат</button>
   </div>
 
+  <div class="card" id="admincard" hidden>
+    <div class="t"><span class="dot"></span>Админка</div>
+    <div class="d">Служебная часть: система, журналы, команды серверу и люди.
+      Показывается только администратору.</div>
+    <a class="go" href="AI-Human-Messenger/admin.html">Открыть админку</a>
+  </div>
+
   <a class="card" href="https://github.com/dperegudov61/praktik">
     <div class="t"><span class="dot"></span>praktik</div>
     <div class="d">Репозиторий проекта на GitHub.</div>
@@ -301,6 +308,9 @@ a{color:#6aa9e6}
         var j = r.json || {};
         if (j.ok && j.user) { lss(USERKEY, j.user); }
         else if (r.status === 200 && !j.ok) { lsd(USERKEY); lsd('door.token'); }
+        var adm = !!(j.ok && j.admin);
+        var ac = $('admincard');
+        if (ac) { if (adm) ac.removeAttribute('hidden'); else ac.setAttribute('hidden', ''); }
         renderWho();
       });
   }
