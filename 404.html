@@ -215,6 +215,8 @@ function firstLive(urls){
 // ищем живой адрес: сначала — подсказка из чата, затем запомненный,
 // параллельно — свежий из status.json
 function findLive(){
+  // на ПК страница открывается прямо у сервера — мост искать не нужно
+  if (/^(127\.0\.0\.1|localhost)$/i.test(location.hostname)) return Promise.resolve(location.origin);
   var mem = ls(URLKEY), hint = hintUrl();
   var quick = [];
   if (hint) quick.push(hint);
@@ -338,6 +340,28 @@ function boot(){
   }
 
   var lost=/[?&]r=tunnel/.test(location.search);
+
+  // Сеанс есть, а ключа нет (вход с другого устройства, ссылка, смена пароля):
+  // не заставляем входить заново — проверяем токен и сразу уходим в чат.
+  var tk = ls('door.token');
+  if (tk) {
+    $('f').style.display = 'none';
+    setState('', 'вход уже есть — открываю чат…');
+    withServer(0, function(url){
+      return fetchJSON(url + '/__door/me', { headers: { 'Authorization': 'Bearer ' + tk } }, 9000)
+        .then(function(r){
+          var j = r.json || {};
+          if (r.ok && j.ok && j.user) { lss('door.user', j.user); enter(url, ''); return; }
+          if (r.status === 401 || r.status === 403) { lsd('door.token'); lsd('door.user'); }
+          showForm();
+        });
+    }, function(){
+      showForm();
+      err('ПК сейчас выключен или туннель перезапускается — обновите страницу через полминуты');
+    });
+    return;
+  }
+
   if(lost) err('связь пропала, а вход на этом устройстве не сохранён — введите имя и пароль');
   withServer(0, function(){ return null; }, function(){
     if(lost) err('сервер не отвечает — включите ПК (окно «2. Сервер») и обновите страницу');
