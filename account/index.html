@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#101317">
+<title>Аккаунт · AI and Human Messenger</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101317;color:#e3e7ec;
+  font:15px/1.5 -apple-system,'Segoe UI',Roboto,system-ui,sans-serif;-webkit-text-size-adjust:100%}
+a{color:#6aa9e6}
+.wrap{max-width:460px;margin:0 auto;padding:28px 16px 40px;
+  padding-top:calc(28px + env(safe-area-inset-top));padding-bottom:calc(40px + env(safe-area-inset-bottom))}
+.head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.head h1{font-size:20px;margin:0;letter-spacing:-.2px;flex:1}
+.head a{font-size:13px;text-decoration:none;background:#1b2027;border:1px solid #2b323c;border-radius:10px;padding:7px 11px;color:#bdc7d3}
+.card{background:#181c22;border:1px solid #262c35;border-radius:16px;padding:16px 16px 14px;margin:0 0 12px}
+.card h2{margin:0 0 4px;font-size:15px}
+.card .hint{color:#8b949c;font-size:12.5px;margin:0 0 12px}
+.who{display:flex;align-items:center;gap:10px;margin:0 0 6px}
+.who .nm{font-size:18px;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dot{width:9px;height:9px;border-radius:50%;background:#4a5260;flex:0 0 auto}
+.dot.on{background:#4dbf74;box-shadow:0 0 0 3px rgba(77,191,116,.16)}
+.dot.off{background:#c0575f}
+.meta{color:#8b949c;font-size:12.5px}
+.meta code{color:#dfe3e8;font-variant-numeric:tabular-nums}
+label{display:block;font-size:12.5px;color:#8b949c;margin:10px 0 5px}
+input{width:100%;padding:12px;border-radius:11px;border:1px solid #2b323c;
+  background:#0d1014;color:#e3e7ec;font:inherit;outline:none}
+input:focus{border-color:#4a8fd8}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.btn{background:#2f7fd0;border:0;color:#fff;border-radius:11px;padding:11px 16px;font:inherit;font-weight:600;cursor:pointer;min-height:44px}
+.btn:hover{background:#3a8de0}
+.btn.ghost{background:#2b323c;color:#dfe3e8}
+.btn.ghost:hover{background:#333b47}
+.btn.danger{background:#7b2b32;color:#ffd7d7}
+.btn.danger:hover{background:#8e333b}
+.btn:disabled{opacity:.5;cursor:default}
+.st{margin-top:10px;font-size:13px;min-height:19px;color:#8b949c}
+.st.ok{color:#7fd3a5}
+.st.bad{color:#e88b92}
+.foot{margin-top:20px;color:#69737f;font-size:12px;line-height:1.7}
+#login{position:fixed;inset:0;background:#0b0e12f5;display:none;align-items:center;justify-content:center;padding:22px;z-index:30;text-align:center}
+#login.on{display:flex}
+#login .bx{max-width:380px}
+#login h2{margin:0 0 8px;font-size:18px}
+#login p{color:#9aa4b0;margin:0 0 16px;font-size:13.5px}
+#login a.btn{display:inline-block;text-decoration:none;text-align:center}
+#del{display:none}
+#del.on{display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>Настройки аккаунта</h1>
+    <a href="../AI-Human-Messenger/">← в чат</a>
+  </div>
+
+  <div class="card">
+    <div class="who"><span class="dot" id="dot"></span><span class="nm" id="myname">…</span></div>
+    <div class="meta" id="mymeta">ищу сервер…</div>
+  </div>
+
+  <div class="card">
+    <h2>Ник</h2>
+    <p class="hint">Так вас видят другие люди в списках и диалогах. Чаты и картинки переедут вместе с ником.</p>
+    <label for="nname">Новый ник</label>
+    <input id="nname" type="text" maxlength="24" autocomplete="nickname" spellcheck="false">
+    <div class="row"><button class="btn" id="bname" type="button">Сохранить ник</button></div>
+    <div class="st" id="nst"></div>
+  </div>
+
+  <div class="card">
+    <h2>Пароль</h2>
+    <p class="hint">После смены пароля старые ссылки на вход перестанут работать, а другие устройства попросят войти заново. Это устройство останется в чате.</p>
+    <label for="p1">Новый пароль</label>
+    <input id="p1" type="password" autocomplete="new-password" maxlength="64">
+    <label for="p2">Повторите пароль</label>
+    <input id="p2" type="password" autocomplete="new-password" maxlength="64">
+    <div class="row"><button class="btn" id="bpass" type="button">Сменить пароль</button></div>
+    <div class="st" id="pst"></div>
+  </div>
+
+  <div class="card">
+    <h2>Выход</h2>
+    <p class="hint">Выйти на этом устройстве. Остальные входы не затрагиваются.</p>
+    <div class="row">
+      <button class="btn ghost" id="blogout" type="button">Выйти</button>
+    </div>
+    <div class="st" id="lst"></div>
+  </div>
+
+  <div class="card">
+    <h2>Удаление аккаунта</h2>
+    <p class="hint" id="delhint">Аккаунт и входы удаляются навсегда. Диалоги уедут в корзину на сервере (data\trash) — вернуть их сможет владелец ПК.</p>
+    <div class="row"><button class="btn danger" id="bdelopen" type="button">Удалить учётную запись</button></div>
+    <div id="del">
+      <label for="dp">Пароль для подтверждения</label>
+      <input id="dp" type="password" autocomplete="current-password" maxlength="64">
+      <div class="row">
+        <button class="btn danger" id="bdel" type="button">Удалить навсегда</button>
+        <button class="btn ghost" id="bdelcancel" type="button">Отмена</button>
+      </div>
+    </div>
+    <div class="st" id="dst"></div>
+  </div>
+
+  <div class="foot">
+    Ссылку на вход и тип учётной записи может выдать только владелец сервера — здесь этих кнопок нет.<br>
+    <a href="../AI-Human-Messenger/">вернуться в чат</a>
+  </div>
+</div>
+
+<div id="login"><div class="bx">
+  <h2>Нужен вход</h2>
+  <p id="lmsg">Настройки открываются после входа — как и сам чат.</p>
+  <a class="btn" id="lgo" href="../accounts/">Войти</a>
+  <div class="st" id="lerr"></div>
+</div></div>
+
+<script>
+(function () {
+'use strict';
+
+var REPO  = 'dperegudov61/dperegudov61.github.io';
+var API   = 'https://api.github.com/repos/' + REPO + '/contents/status.json';
+var RAW   = 'https://raw.githubusercontent.com/' + REPO + '/main/status.json';
+var LOCAL = '/status.json';
+var TOK   = 'door.token';
+var URLKEY = 'door.url';
+var STALE_MIN = 60;
+var GH = 'https://dperegudov61.github.io';
+var CHAT = GH + '/AI-Human-Messenger/';
+
+var $ = function (id) { return document.getElementById(id); };
+var base = '', tok = '', me = '', myId = '', myAdmin = false, myPass = false;
+
+function ls(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }
+function lss(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function lsd(k) { try { localStorage.removeItem(k); } catch (e) {} }
+
+function st(el, text, cls) {
+  el.className = 'st' + (cls ? ' ' + cls : '');
+  el.textContent = text || '';
+}
+
+// ---------- адрес сервера ----------
+function timeout(ms) {
+  var ctl = new AbortController();
+  var t = setTimeout(function () { try { ctl.abort(); } catch (e) {} }, ms);
+  return { signal: ctl.signal, done: function () { clearTimeout(t); } };
+}
+function fetchJSON(url, opt, ms) {
+  var tm = timeout(ms || 8000);
+  return fetch(url, Object.assign({ cache: 'no-store', signal: tm.signal }, opt || {}))
+    .then(function (r) {
+      tm.done();
+      return r.text().then(function (txt) {
+        var j = {};
+        try { j = JSON.parse(txt || '{}'); } catch (e) {}
+        return { status: r.status, ok: r.ok, json: j };
+      });
+    })
+    .catch(function () { tm.done(); return { status: 0, ok: false, json: {} }; });
+}
+function b64ToText(b64) {
+  var bin = atob(String(b64).replace(/\s/g, ''));
+  var n = bin.length, bytes = new Uint8Array(n), i;
+  for (i = 0; i < n; i++) bytes[i] = bin.charCodeAt(i);
+  if (window.TextDecoder) return new TextDecoder('utf-8').decode(bytes);
+  var s = '';
+  for (i = 0; i < n; i++) s += String.fromCharCode(bytes[i]);
+  return decodeURIComponent(escape(s));
+}
+function statusFrom(r) {
+  if (!r || !r.ok) return null;
+  var j = r.json || {};
+  if (typeof j.content === 'string' && j.encoding === 'base64') {
+    try { j = JSON.parse(b64ToText(j.content)); } catch (e) { return null; }
+  }
+  return (j && (typeof j.url === 'string' || j.connections)) ? j : null;
+}
+function connsOf(j) {
+  var out = [], arr = j && j.connections, i;
+  if (Object.prototype.toString.call(arr) === '[object Array]') {
+    for (i = 0; i < arr.length; i++) {
+      var c = arr[i] || {};
+      if (typeof c.url !== 'string' || !c.url) continue;
+      out.push({ url: c.url.replace(/\/+$/, ''), updated: Date.parse(c.created || '') || 0 });
+    }
+  }
+  if (!out.length && j && typeof j.url === 'string' && j.url)
+    out.push({ url: j.url.replace(/\/+$/, ''), updated: Date.parse(j.updated || '') || 0 });
+  return out;
+}
+function statusList() {
+  var bust = '?v=' + Date.now();
+  var reqs = [ fetchJSON(API, { headers: { 'Accept': 'application/vnd.github+json' } }, 7000),
+               fetchJSON(LOCAL + bust, null, 5000),
+               fetchJSON(RAW + bust, null, 7000) ];
+  return Promise.all(reqs).then(function (res) {
+    var seen = {}, out = [], i, k;
+    for (i = 0; i < res.length; i++) {
+      var list = connsOf(statusFrom(res[i]));
+      for (k = 0; k < list.length; k++) {
+        var u = list[k].url;
+        if (seen[u]) { if (list[k].updated > seen[u].updated) seen[u].updated = list[k].updated; continue; }
+        seen[u] = list[k];
+      }
+    }
+    for (var key in seen) if (Object.prototype.hasOwnProperty.call(seen, key)) out.push(seen[key]);
+    var mem = ls(URLKEY);
+    if (mem && !seen[mem]) out.push({ url: mem, updated: -1 });
+    out.sort(function (a, b) { return b.updated - a.updated; });
+    return out.map(function (x) { return x.url; });
+  });
+}
+function ping(url) {
+  if (!url) return Promise.resolve(false);
+  return fetchJSON(url + '/__door/hi', null, 6000).then(function (r) {
+    return !!(r.ok && r.json && r.json.ok === true);
+  });
+}
+function firstLive(urls) {
+  return new Promise(function (resolve) {
+    if (!urls.length) { resolve(''); return; }
+    var left = urls.length, done = false;
+    urls.forEach(function (u) {
+      ping(u).then(function (alive) {
+        left--;
+        if (alive && !done) { done = true; resolve(u); }
+        else if (left === 0 && !done) { done = true; resolve(''); }
+      });
+    });
+  });
+}
+function findLive() {
+  var mem = ls(URLKEY), local = /^(127\.0\.0\.1|localhost)$/i.test(location.hostname);
+  if (local) return Promise.resolve(location.origin);
+  var quick = mem ? [mem] : [];
+  var slow = statusList();
+  return new Promise(function (resolve) {
+    var done = false, pending = 2;
+    function hit(u) {
+      if (done) return;
+      if (u) { done = true; resolve(u); return; }
+      if (--pending === 0) { done = true; resolve(''); }
+    }
+    firstLive(quick).then(hit);
+    slow.then(firstLive).then(hit);
+  });
+}
+
+// ---------- запросы к серверу ----------
+function api(path, opt) {
+  opt = opt || {};
+  var h = { 'Authorization': 'Bearer ' + tok };
+  if (opt.body) h['Content-Type'] = 'application/json';
+  return fetchJSON(base + path, { method: opt.method || 'GET', headers: h, body: opt.body }, opt.ms || 20000);
+}
+
+function showLogin(msg) {
+  $('lmsg').textContent = msg || 'Настройки открываются после входа — как и сам чат.';
+  $('lgo').href = GH + '/accounts/?next=' + encodeURIComponent(location.origin + location.pathname);
+  $('login').className = 'on';
+  $('dot').className = 'dot off';
+}
+
+function renderWho() {
+  $('myname').textContent = me || '—';
+  $('myname').title = me || '';
+  var bits = [];
+  if (myId) bits.push('id <code>' + myId + '</code>');
+  bits.push(myAdmin ? 'администратор' : 'обычная учётная запись');
+  if (!myPass) bits.push('пароль не задан');
+  $('mymeta').innerHTML = bits.join(' · ');
+  $('dot').className = 'dot on';
+  $('nname').value = me || '';
+}
+
+function boot() {
+  findLive().then(function (url) {
+    if (!url) {
+      showLogin('Сервер не отвечает — включите ПК (окно «2. Сервер») и обновите страницу.');
+      st($('nst'), 'нет связи с сервером', 'bad');
+      return;
+    }
+    base = url.replace(/\/+$/, '');
+    lss(URLKEY, base);
+    tok = ls(TOK);
+    if (!tok) { showLogin(); return; }
+    api('/__acc/me', { ms: 12000 }).then(function (r) {
+      var j = r.json || {};
+      if (!r.ok || !j.ok) {
+        if (r.status === 401 || r.status === 403) { lsd(TOK); showLogin('Вход на этом устройстве больше не действует — войдите заново.'); }
+        else showLogin(j.error || 'Сервер не ответил — обновите страницу.');
+        return;
+      }
+      me = j.user || j.real || '';
+      myId = j.id || '';
+      myAdmin = !!j.admin;
+      myPass = !!j.pass;
+      try { lss('door.user', me); } catch (e) {}
+      renderWho();
+    });
+  }, function () { showLogin('Сервер не отвечает — включите ПК.'); });
+}
+
+// ---------- ник ----------
+$('bname').onclick = function () {
+  var v = $('nname').value.trim();
+  var el = $('nst');
+  if (!v) { st(el, 'ник не может быть пустым', 'bad'); return; }
+  if (v === me) { st(el, 'это ваш текущий ник', ''); return; }
+  var b = $('bname');
+  b.disabled = true; st(el, 'сохраняю…', '');
+  api('/__acc/name', { method: 'POST', body: JSON.stringify({ name: v }) }).then(function (r) {
+    b.disabled = false;
+    var j = r.json || {};
+    if (!r.ok || j.ok === false) { st(el, j.error || ('не получилось (HTTP ' + r.status + ')'), 'bad'); return; }
+    me = j.name; myId = j.id || myId;
+    lss('door.user', me);
+    renderWho();
+    st(el, 'ник изменён ✓ чаты и картинки переехали вместе с ним', 'ok');
+  }).catch(function () { b.disabled = false; st(el, 'связь оборвалась — попробуйте ещё раз', 'bad'); });
+};
+
+// ---------- пароль ----------
+$('bpass').onclick = function () {
+  var p1 = $('p1').value, p2 = $('p2').value, el = $('pst');
+  if (p1.length < 6) { st(el, 'пароль короче 6 символов не годится', 'bad'); return; }
+  if (p1 !== p2) { st(el, 'пароли не совпадают', 'bad'); return; }
+  var b = $('bpass');
+  b.disabled = true; st(el, 'меняю…', '');
+  api('/__acc/pass', { method: 'POST', body: JSON.stringify({ pass: p1, pass2: p2 }) }).then(function (r) {
+    b.disabled = false;
+    var j = r.json || {};
+    if (!r.ok || j.ok === false) { st(el, j.error || ('не получилось (HTTP ' + r.status + ')'), 'bad'); return; }
+    if (j.token) { lss(TOK, j.token); tok = j.token; }
+    lsd('door.key');           // старые ссылки погашены — ключ этого устройства тоже больше не нужен
+    myPass = true;
+    renderWho();
+    $('p1').value = ''; $('p2').value = '';
+    st(el, 'пароль изменён ✓ старые ссылки больше не работают', 'ok');
+  }).catch(function () { b.disabled = false; st(el, 'связь оборвалась — попробуйте ещё раз', 'bad'); });
+};
+
+// ---------- выход ----------
+function forgetAll() {
+  lsd(TOK); lsd('door.key'); lsd('door.user'); lsd('door.token');
+}
+
+$('blogout').onclick = function () {
+  var b = $('blogout');
+  b.disabled = true; st($('lst'), 'выхожу…', '');
+  api('/__acc/logout', { method: 'POST', body: '{}' }).then(function () {
+    forgetAll();
+    location.replace(GH + '/accounts/');
+  }).catch(function () {
+    forgetAll();
+    location.replace(GH + '/accounts/');
+  });
+};
+
+// ---------- удаление ----------
+$('bdelopen').onclick = function () {
+  $('del').className = 'on';
+  $('bdelopen').disabled = true;
+  st($('dst'), '', '');
+  setTimeout(function () { try { $('dp').focus(); } catch (e) {} }, 50);
+};
+$('bdelcancel').onclick = function () {
+  $('del').className = '';
+  $('bdelopen').disabled = false;
+  $('dp').value = '';
+  st($('dst'), '', '');
+};
+$('bdel').onclick = function () {
+  var el = $('dst');
+  if (!confirm('Удалить учётную запись «' + me + '»? Входы закроются, диалоги уедут в корзину на сервере.')) return;
+  var b = $('bdel');
+  b.disabled = true; st(el, 'удаляю…', '');
+  api('/__acc/delete', { method: 'POST', body: JSON.stringify({ pass: $('dp').value }) }).then(function (r) {
+    b.disabled = false;
+    var j = r.json || {};
+    if (!r.ok || j.ok === false) { st(el, j.error || ('не получилось (HTTP ' + r.status + ')'), 'bad'); return; }
+    forgetAll();
+    st(el, 'учётная запись удалена. Возвращаю на страницу входа…', 'ok');
+    setTimeout(function () { location.replace(GH + '/accounts/'); }, 1500);
+  }).catch(function () { b.disabled = false; st(el, 'связь оборвалась — попробуйте ещё раз', 'bad'); });
+};
+
+boot();
+})();
+</script>
+</body>
+</html>
