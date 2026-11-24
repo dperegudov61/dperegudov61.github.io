@@ -15,6 +15,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <style>
 *{box-sizing:border-box}
+/* у .card и #inst задан display:block — без этого правила атрибут hidden не работает */
+[hidden]{display:none!important}
 body{margin:0;background:#101317;color:#e3e7ec;
   font:15px/1.6 -apple-system,'Segoe UI',Roboto,system-ui,sans-serif;-webkit-text-size-adjust:100%}
 .wrap{max-width:720px;margin:0 auto;padding:44px 18px 56px;
@@ -98,7 +100,8 @@ a{color:#6aa9e6}
 
   <div class="foot">
     GitHub: <a href="https://github.com/dperegudov61">@dperegudov61</a><br>
-    Вход и регистрация: <a href="accounts/">dperegudov61.github.io/accounts</a>
+    Вход: <a href="accounts/">dperegudov61.github.io/accounts</a> ·
+    настройки: <a href="account/">аккаунт</a>
   </div>
 </div>
 
@@ -253,8 +256,8 @@ a{color:#6aa9e6}
     if (user || key) {
       var a = document.createElement('a');
       a.className = 'name';
-      a.href = 'accounts/';
-      a.title = 'аккаунт';
+      a.href = 'account/';
+      a.title = 'настройки аккаунта';
       if (!state.online) a.setAttribute('aria-disabled', 'true');
       var d = document.createElement('span');
       d.className = 'dot ' + (state.online ? 'on' : 'off');
