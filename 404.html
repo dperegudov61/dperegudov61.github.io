@@ -7,10 +7,10 @@
 <meta name="referrer" content="no-referrer">
 <title data-i18n="login.title">Sign in · AI and Human Messenger</title>
 <meta name="theme-color" content="#101317">
-<script src="../theme.js" data-i18n="strings.tsv"></script>
+<script src="/ui/ui.js" data-i18n="strings.tsv" data-account="0"></script>
 <style>/* ---------- палитра: тёмная (по умолчанию) и светлая ----------
    Все цвета страницы берутся только отсюда; тему переключает атрибут
-   data-theme на <html> (его ставит ../theme.js). */
+   data-theme на <html> (его ставит общий шаблон /ui/ui.js). */
 :root{
   color-scheme:dark;
   --bg:#101317; --card:#181c22; --input:#0d1014;
@@ -65,7 +65,8 @@ button:disabled{opacity:.55;cursor:default}
 <div class="card">
   <div class="head">
     <h1 data-i18n="login.head">AI chat</h1>
-    <span class="ui-sw" data-ui="switch"></span>
+    <!-- шапка шаблона: логотип, тема, язык (аккаунт на этой странице не нужен) -->
+    <div class="uibar" data-ui="bar"></div>
   </div>
   <div class="sub" data-i18n="login.sub">Sign in to AI and Human Messenger. The chat itself runs on a home PC.</div>
 
