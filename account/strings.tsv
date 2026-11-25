@@ -1,0 +1,60 @@
+key	en	ru
+lang.en	English	Английский
+lang.ru	Russian	Русский
+ui.theme	Theme	Тема
+ui.theme.dark	Dark	Тёмная
+ui.theme.light	Light	Светлая
+ui.theme.auto	System	Как в системе
+ui.lang	Language	Язык
+ui.home	Home page	Главная страница
+acc.title	Account · AI and Human Messenger	Аккаунт · AI and Human Messenger
+acc.head	Account settings	Настройки аккаунта
+acc.back	← to chat	← в чат
+acc.searching	looking for server…	ищу сервер…
+acc.nick	Nickname	Ник
+acc.nick.hint	This is how other people see you in lists and dialogs. Chats and pictures move with the nickname.	Так вас видят другие люди в списках и диалогах. Чаты и картинки переедут вместе с ником.
+acc.nick.new	New nickname	Новый ник
+acc.nick.save	Save nickname	Сохранить ник
+acc.pass	Password	Пароль
+acc.pass.hint	After a password change old sign-in links stop working and other devices ask to sign in again. This device stays in the chat.	После смены пароля старые ссылки на вход перестанут работать, а другие устройства попросят войти заново. Это устройство останется в чате.
+acc.pass.new	New password	Новый пароль
+acc.pass.repeat	Repeat password	Повторите пароль
+acc.pass.save	Change password	Сменить пароль
+acc.exit	Sign out	Выход
+acc.exit.hint	Sign out on this device. Other sign-ins stay.	Выйти на этом устройстве. Остальные входы не затрагиваются.
+acc.exit.go	Sign out	Выйти
+acc.del	Delete account	Удаление аккаунта
+acc.del.hint	The account and sign-ins are deleted for good. Dialogs go to the server recycle bin (data\trash) — only the PC owner can bring them back.	Аккаунт и входы удаляются навсегда. Диалоги уедут в корзину на сервере (data\trash) — вернуть их сможет владелец ПК.
+acc.del.go	Delete account	Удалить учётную запись
+acc.del.pass	Password to confirm	Пароль для подтверждения
+acc.del.forever	Delete for good	Удалить навсегда
+acc.cancel	Cancel	Отмена
+acc.foot	Only the server owner can issue a sign-in link and the account type — those buttons are not here.	Ссылку на вход и тип учётной записи может выдать только владелец сервера — здесь этих кнопок нет.
+acc.foot.back	back to chat	вернуться в чат
+acc.login.need	Sign in needed	Нужен вход
+acc.login.msg	Settings open after sign-in — just like the chat.	Настройки открываются после входа — как и сам чат.
+acc.login.go	Sign in	Войти
+acc.err.conn	connection dropped — press again	связь оборвалась — нажмите ещё раз
+acc.err.http	failed (HTTP 	не получилось (HTTP 
+acc.role.admin	administrator	администратор
+acc.role.user	regular account	обычная учётная запись
+acc.no.pass	no password set	пароль не задан
+acc.err.off	Server is not responding — turn on the PC («2. Server» window) and reload the page.	Сервер не отвечает — включите ПК (окно «2. Сервер») и обновите страницу.
+acc.no.conn	no connection to the server	нет связи с сервером
+acc.login.dead	The sign-in on this device no longer works — sign in again.	Вход на этом устройстве больше не действует — войдите заново.
+acc.err.noreply	The server did not answer — reload the page.	Сервер не ответил — обновите страницу.
+acc.err.off2	Server is not responding — turn on the PC.	Сервер не отвечает — включите ПК.
+acc.err.nick.empty	the nickname cannot be empty	ник не может быть пустым
+acc.nick.same	this is your current nickname	это ваш текущий ник
+acc.saving	saving…	сохраняю…
+acc.nick.done	nickname changed ✓ chats and pictures moved with it	ник изменён ✓ чаты и картинки переехали вместе с ним
+acc.err.conn2	connection dropped — try again	связь оборвалась — попробуйте ещё раз
+acc.err.pass.short	a password shorter than 6 characters will not do	пароль короче 6 символов не годится
+acc.err.pass.same	passwords do not match	пароли не совпадают
+acc.changing	changing…	меняю…
+acc.pass.done	password changed ✓ old links no longer work	пароль изменён ✓ старые ссылки больше не работают
+acc.exiting	signing out…	выхожу…
+acc.del.confirm1	Delete account “	Удалить учётную запись «
+acc.del.confirm2	”? Sign-ins will close and dialogs go to the server recycle bin.	»? Входы закроются, диалоги уедут в корзину на сервере.
+acc.deleting	deleting…	удаляю…
+acc.deleted	account deleted. Returning to the sign-in page…	учётная запись удалена. Возвращаю на страницу входа…
