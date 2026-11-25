@@ -51,6 +51,15 @@ h1{margin:0 0 4px;font-size:26px;letter-spacing:-.3px;line-height:1.25}
 #inst{display:block}
 #inst .hint{color:#8c96a3;font-size:13px;margin:10px 0 0;display:none}
 #inst .hint.on{display:block}
+/* мини-приложения: плитки с иконками */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.tile{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 8px;text-decoration:none;
+  color:inherit;background:#1f242c;border:1px solid #2b323c;border-radius:13px;
+  transition:border-color .15s,transform .15s;-webkit-tap-highlight-color:transparent}
+.tile:hover,.tile:focus-visible{border-color:#3a5a7d;transform:translateY(-1px);outline:none}
+.tile img{width:56px;height:56px;border-radius:13px;display:block;object-fit:cover;background:#0f1216}
+.tile span{font-size:12.5px;font-weight:600;line-height:1.25;text-align:center;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .foot{margin-top:28px;padding-top:16px;border-top:1px solid #222831;color:#69737f;font-size:12.5px;line-height:1.7}
 .foot a{color:#8b93a0}
 a{color:#6aa9e6}
@@ -81,6 +90,13 @@ a{color:#6aa9e6}
     <div class="d">Служебная часть: система, журналы, команды серверу и люди.
       Показывается только администратору.</div>
     <a class="go" href="AI-Human-Messenger/admin.html">Открыть админку</a>
+  </div>
+
+  <div class="card" id="appscard" hidden>
+    <div class="t"><span class="dot"></span>Мини-приложения</div>
+    <div class="d">Маленькие приложения, которые работают прямо в браузере: без установки,
+      без сервера и без интернета. Список берётся из репозитория mini-apps.</div>
+    <div class="tiles" id="appstiles"></div>
   </div>
 
   <a class="card" href="https://github.com/dperegudov61/praktik">
@@ -346,6 +362,48 @@ a{color:#6aa9e6}
   renderState();
   refresh();
   setInterval(refresh, 30000);   // раз в полминуты проверяем сервер заново
+})();
+</script>
+
+<script>
+(function () {
+  'use strict';
+  // Мини-приложения: список лежит в репозитории mini-apps (тот же домен — обычный fetch),
+  // иконки и адреса оттуда же. Нет списка — блок просто не показываем.
+  var box = document.getElementById('appscard');
+  var tiles = document.getElementById('appstiles');
+  if (!box || !tiles || !window.fetch) return;
+
+  fetch('mini-apps/apps.json', { cache: 'no-cache' })
+    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function (data) {
+      var apps = (data && data.apps) || [];
+      apps.forEach(function (a) {
+        var path = a.path || ('apps/' + a.id + '/');
+        var link = document.createElement('a');
+        link.className = 'tile';
+        link.href = 'mini-apps/' + path;
+        link.title = (a.nameRu ? a.nameRu + ' · ' + a.name : a.name) +
+                     (a.descriptionRu ? ' — ' + a.descriptionRu : '');
+
+        var img = document.createElement('img');
+        img.src = 'mini-apps/' + (a.icon || (path + 'icon.png'));
+        img.alt = '';
+        img.width = 56;
+        img.height = 56;
+        img.loading = 'lazy';
+        img.onerror = function () { img.style.visibility = 'hidden'; };
+
+        var name = document.createElement('span');
+        name.textContent = a.nameRu || a.name;
+
+        link.appendChild(img);
+        link.appendChild(name);
+        tiles.appendChild(link);
+      });
+      if (apps.length) box.removeAttribute('hidden');
+    })
+    .catch(function () { /* списка нет — оставляем блок скрытым */ });
 })();
 </script>
 </body>
