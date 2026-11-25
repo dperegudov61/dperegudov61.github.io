@@ -6,7 +6,7 @@
 <title data-i18n="home.title">Dmitry Peregudov — project page</title>
 <meta name="description" content="Personal project page of Dmitry Peregudov: local AI and Human Messenger and other projects.">
 <meta name="theme-color" content="#101317">
-<script src="theme.js" data-i18n="strings.tsv"></script>
+<script src="/ui/ui.js" data-i18n="strings.tsv"></script>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <style>/* ---------- палитра: тёмная (по умолчанию) и светлая ----------
    Все цвета страницы берутся только отсюда; тему переключает атрибут
-   data-theme на <html> (его ставит theme.js рядом с этим файлом). */
+   data-theme на <html> (его ставит общий шаблон /ui/ui.js). */
 :root{
   color-scheme:dark;
   --bg:#101317; --card:#181c22; --chip:#1b2027; --area:#1f242c;
@@ -50,11 +50,6 @@ body{margin:0;background:var(--bg);color:var(--tx);
 h1{margin:0 0 4px;font-size:26px;letter-spacing:-.3px;line-height:1.25}
 .role{color:var(--tx4);font-size:14px;margin:0}
 .who{flex:0 0 auto;margin-top:2px;display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;max-width:100%}
-.who .name{display:inline-block;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  font-size:13.5px;font-weight:600;color:var(--tx);background:var(--chip);border:1px solid var(--line2);border-radius:10px;
-  padding:7px 11px;text-decoration:none}
-.who .name:hover{border-color:var(--line3)}
-.who .name .dot{margin-right:7px;vertical-align:1px}
 .sec{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);margin:0 0 12px}
 .card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);
   border-radius:16px;padding:18px 18px 16px;margin:0 0 12px;transition:border-color .15s,transform .15s}
@@ -98,8 +93,8 @@ a{color:var(--lnk)}
       <p class="role" data-i18n="home.sub">Project page</p>
     </div>
     <div class="who">
-      <span class="ui-sw" data-ui="switch"></span>
-      <span id="who"></span>
+      <!-- шапка шаблона: логотип, тема, язык, аккаунт (рисует /ui/ui.js) -->
+      <div class="uibar" data-ui="bar"></div>
     </div>
   </div>
 
@@ -289,36 +284,15 @@ a{color:var(--lnk)}
     location.href = CHATPAGE;
   }
 
-  // ---------- кто вошёл ----------
+  // ---------- кто вошёл: кнопку аккаунта рисует общий шаблон (/ui/ui.js) ----------
   function renderWho() {
-    var user = ls(USERKEY), key = ls(KEYKEY);
-    var box = $('who');
-    if (user || key) {
-      var a = document.createElement('a');
-      a.className = 'name';
-      a.href = 'account/';
-      a.title = t("home.acc.title", "account settings");
-      if (!state.online) a.setAttribute('aria-disabled', 'true');
-      var d = document.createElement('span');
-      d.className = 'dot ' + (state.online ? 'on' : 'off');
-      a.appendChild(d);
-      a.appendChild(document.createTextNode(user || t("home.signed", "signed in")));
-      box.innerHTML = '';
-      box.appendChild(a);
-    } else {
-      var b = document.createElement('a');
-      b.className = 'go ghost';
-      b.href = 'accounts/';
-      b.textContent = t("home.enter", "Sign in");
-      if (!state.online) { b.setAttribute('aria-disabled', 'true'); b.style.pointerEvents = 'none'; b.style.opacity = '.45'; }
-      box.innerHTML = '';
-      box.appendChild(b);
-    }
+    if (window.UI) UI.refresh();   // заново прочитать door.user / door.token из localStorage
   }
 
   // ---------- состояние сервера ----------
   function renderState() {
     var dot = $('dot'), st = $('state'), btn = $('chatbtn'), card = $('chatcard');
+    if (window.UI) UI.online(state.online);   // точка в кнопке аккаунта: сервер отвечает или нет
     dot.className = 'dot ' + (state.online ? 'on' : 'off');
     if (state.online) {
       st.textContent = t("home.state.up", "server is online");
