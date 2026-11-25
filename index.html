@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Перегудов Дмитрий Владимирович — страница проектов</title>
-<meta name="description" content="Личная страница проектов Перегудова Дмитрия Владимировича: локальный AI and Human Messenger и другие проекты.">
+<title data-i18n="home.title">Dmitry Peregudov — project page</title>
+<meta name="description" content="Personal project page of Dmitry Peregudov: local AI and Human Messenger and other projects.">
 <meta name="theme-color" content="#101317">
-<script src="theme.js"></script>
+<script src="theme.js" data-i18n="strings.tsv"></script>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -94,8 +94,8 @@ a{color:var(--lnk)}
 <div class="wrap">
   <div class="top">
     <div class="l">
-      <h1>Перегудов Дмитрий Владимирович</h1>
-      <p class="role">Страница проектов</p>
+      <h1 data-i18n="home.name">Dmitry Vladimirovich Peregudov</h1>
+      <p class="role" data-i18n="home.sub">Project page</p>
     </div>
     <div class="who">
       <span class="ui-sw" data-ui="switch"></span>
@@ -103,49 +103,45 @@ a{color:var(--lnk)}
     </div>
   </div>
 
-  <p class="sec">Проекты</p>
+  <p class="sec" data-i18n="home.sec.projects">Projects</p>
 
   <div class="card" id="chatcard">
     <div class="t"><span class="dot" id="dot"></span>AI and Human Messenger</div>
-    <div class="d">Локальный ИИ на домашнем компьютере: чат с языковыми моделями и генерация картинок.
-      Чат работает, пока включён ПК.</div>
-    <p class="state" id="state">проверяю сервер…</p>
-    <button class="go" id="chatbtn" type="button" aria-disabled="true" disabled>Открыть чат</button>
+    <div class="d" data-i18n="home.chat.desc">Local AI on a home PC: chat with language models and image generation. The chat works while the PC is on.</div>
+    <p class="state" id="state" data-i18n="home.state.checking">checking server…</p>
+    <button class="go" id="chatbtn" type="button" aria-disabled="true" disabled data-i18n="home.open.chat">Open chat</button>
   </div>
 
   <div class="card" id="admincard" hidden>
-    <div class="t"><span class="dot"></span>Админка</div>
-    <div class="d">Служебная часть: система, журналы, команды серверу и люди.
-      Показывается только администратору.</div>
-    <a class="go" href="AI-Human-Messenger/admin.html">Открыть админку</a>
+    <div class="t"><span class="dot"></span><span data-i18n="home.admin">Admin</span></div>
+    <div class="d" data-i18n="home.admin.desc">Service part: system, logs, server commands and people. Shown to the administrator only.</div>
+    <a class="go" href="AI-Human-Messenger/admin.html" data-i18n="home.open.admin">Open admin</a>
   </div>
 
   <div class="card" id="appscard" hidden>
-    <div class="t"><span class="dot"></span>Мини-приложения</div>
-    <div class="d">Маленькие приложения, которые работают прямо в браузере: без установки,
-      без сервера и без интернета. Список берётся из репозитория mini-apps.</div>
+    <div class="t"><span class="dot"></span><span data-i18n="home.apps">Mini apps</span></div>
+    <div class="d" data-i18n="home.apps.desc">Small apps that run in the browser: no install, no server, no internet. The list comes from the mini-apps repository.</div>
     <div class="tiles" id="appstiles"></div>
   </div>
 
   <a class="card" href="https://github.com/dperegudov61/praktik">
     <div class="t"><span class="dot"></span>praktik</div>
-    <div class="d">Репозиторий проекта на GitHub.</div>
-    <span class="go ghost">Смотреть код</span>
+    <div class="d" data-i18n="home.praktik.desc">Project repository on GitHub.</div>
+    <span class="go ghost" data-i18n="home.code">View code</span>
   </a>
 
   <div class="card" id="inst" hidden>
-    <div class="t"><span class="dot"></span>Приложение</div>
-    <div class="d">Эта страница ставится на телефон как обычное приложение — со своей иконкой
-      и без адресной строки браузера.</div>
-    <button class="go" id="instbtn" type="button">Установить на Android</button>
-    <p class="hint" id="insthint">Откройте меню Chrome <b>⋮</b> и выберите
-      «Установить приложение» (или «Добавить на главный экран»).</p>
+    <div class="t"><span class="dot"></span><span data-i18n="home.app">App</span></div>
+    <div class="d" data-i18n="home.app.desc">This page installs on a phone like a normal app — with its own icon and no browser address bar.</div>
+    <button class="go" id="instbtn" type="button" data-i18n="home.install">Install on Android</button>
+    <p class="hint" id="insthint"><span data-i18n="home.install.hint1">Open the Chrome menu</span> <b>⋮</b>
+      <span data-i18n="home.install.hint2">and choose “Install app” (or “Add to Home screen”).</span></p>
   </div>
 
   <div class="foot">
     GitHub: <a href="https://github.com/dperegudov61">@dperegudov61</a><br>
-    Вход: <a href="accounts/">dperegudov61.github.io/accounts</a> ·
-    настройки: <a href="account/">аккаунт</a>
+    <span data-i18n="home.foot.login">Sign in:</span> <a href="accounts/">dperegudov61.github.io/accounts</a>
+    <span data-i18n="home.foot.mid">· settings:</span> <a href="account/" data-i18n="home.foot.account">account</a>
   </div>
 </div>
 
@@ -301,19 +297,19 @@ a{color:var(--lnk)}
       var a = document.createElement('a');
       a.className = 'name';
       a.href = 'account/';
-      a.title = 'настройки аккаунта';
+      a.title = t("home.acc.title", "account settings");
       if (!state.online) a.setAttribute('aria-disabled', 'true');
       var d = document.createElement('span');
       d.className = 'dot ' + (state.online ? 'on' : 'off');
       a.appendChild(d);
-      a.appendChild(document.createTextNode(user || 'вход выполнен'));
+      a.appendChild(document.createTextNode(user || t("home.signed", "signed in")));
       box.innerHTML = '';
       box.appendChild(a);
     } else {
       var b = document.createElement('a');
       b.className = 'go ghost';
       b.href = 'accounts/';
-      b.textContent = 'Войти';
+      b.textContent = t("home.enter", "Sign in");
       if (!state.online) { b.setAttribute('aria-disabled', 'true'); b.style.pointerEvents = 'none'; b.style.opacity = '.45'; }
       box.innerHTML = '';
       box.appendChild(b);
@@ -325,11 +321,11 @@ a{color:var(--lnk)}
     var dot = $('dot'), st = $('state'), btn = $('chatbtn'), card = $('chatcard');
     dot.className = 'dot ' + (state.online ? 'on' : 'off');
     if (state.online) {
-      st.textContent = 'сервер на связи';
+      st.textContent = t("home.state.up", "server is online");
       card.className = 'card';
       btn.disabled = false; btn.removeAttribute('aria-disabled');
     } else {
-      st.textContent = 'сервер не отвечает — включите ПК (окно «2. Сервер»)';
+      st.textContent = t("home.state.down", "server is not responding — turn on the PC («2. Server» window)");
       card.className = 'card off';
       btn.disabled = true; btn.setAttribute('aria-disabled', 'true');
     }
