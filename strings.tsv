@@ -1,0 +1,37 @@
+key	en	ru
+lang.en	English	Английский
+lang.ru	Russian	Русский
+ui.theme	Theme	Тема
+ui.theme.dark	Dark	Тёмная
+ui.theme.light	Light	Светлая
+ui.theme.auto	System	Как в системе
+ui.lang	Language	Язык
+ui.home	Home page	Главная страница
+home.title	Dmitry Peregudov — project page	Перегудов Дмитрий Владимирович — страница проектов
+home.name	Dmitry Vladimirovich Peregudov	Перегудов Дмитрий Владимирович
+home.sub	Project page	Страница проектов
+home.sec.projects	Projects	Проекты
+home.chat.desc	Local AI on a home PC: chat with language models and image generation. The chat works while the PC is on.	Локальный ИИ на домашнем компьютере: чат с языковыми моделями и генерация картинок. Чат работает, пока включён ПК.
+home.state.checking	checking server…	проверяю сервер…
+home.open.chat	Open chat	Открыть чат
+home.admin	Admin	Админка
+home.admin.desc	Service part: system, logs, server commands and people. Shown to the administrator only.	Служебная часть: система, журналы, команды серверу и люди. Показывается только администратору.
+home.open.admin	Open admin	Открыть админку
+home.apps	Mini apps	Мини-приложения
+home.apps.desc	Small apps that run in the browser: no install, no server, no internet. The list comes from the mini-apps repository.	Маленькие приложения, которые работают прямо в браузере: без установки, без сервера и без интернета. Список берётся из репозитория mini-apps.
+home.praktik.desc	Project repository on GitHub.	Репозиторий проекта на GitHub.
+home.code	View code	Смотреть код
+home.app	App	Приложение
+home.app.desc	This page installs on a phone like a normal app — with its own icon and no browser address bar.	Эта страница ставится на телефон как обычное приложение — со своей иконкой и без адресной строки браузера.
+home.install	Install on Android	Установить на Android
+home.install.hint1	Open the Chrome menu	Откройте меню Chrome
+home.install.hint2	and choose “Install app” (or “Add to Home screen”).	и выберите «Установить приложение» (или «Добавить на главный экран»).
+home.foot.login	Sign in:	Вход:
+home.foot.mid	· settings:	· настройки:
+home.foot.account	account	аккаунт
+home.state.up	server is online	сервер на связи
+home.state.down	server is not responding — turn on the PC («2. Server» window)	сервер не отвечает — включите ПК (окно «2. Сервер»)
+home.enter	Sign in	Войти
+home.signed	signed in	вход выполнен
+home.acc.title	account settings	настройки аккаунта
+home.desc	Personal project page of Dmitry Peregudov: local AI and Human Messenger and other projects.	Личная страница проектов Перегудова Дмитрия Владимировича: локальный AI and Human Messenger и другие проекты.
