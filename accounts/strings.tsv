@@ -1,12 +1,4 @@
 key	en	ru
-lang.en	English	Английский
-lang.ru	Russian	Русский
-ui.theme	Theme	Тема
-ui.theme.dark	Dark	Тёмная
-ui.theme.light	Light	Светлая
-ui.theme.auto	System	Как в системе
-ui.lang	Language	Язык
-ui.home	Home page	Главная страница
 login.title	Sign in · AI and Human Messenger	Вход · AI and Human Messenger
 login.head	AI chat	AI-чат
 login.sub	Sign in to AI and Human Messenger. The chat itself runs on a home PC.	Вход в AI and Human Messenger. Сам чат работает на домашнем ПК.
@@ -37,4 +29,4 @@ login.err.origin	this server address is not allowed — tell the owner	этот 
 login.err.half2	connection dropped halfway — press “Sign in” again	связь оборвалась на полпути — нажмите «Войти» ещё раз
 login.err.down	server is not responding — turn on the «2. Server» window on the PC	сервер не отвечает — включите окно «2. Сервер» на ПК
 login.msg.forgot	this device no longer remembers the sign-in	это устройство больше не помнит вход
-login.signing	signing in as 	вхожу как 
+login.signing	signing in as 	вхожу как
