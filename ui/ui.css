@@ -1,0 +1,88 @@
+/* ui.css — вид общей шапки (её рисует ui.js).
+ *
+ * Подключать вручную НЕ нужно: ui.js сам добавляет этот файл ссылкой из папки, где лежит.
+ * Палитра у шапки своя (--ub-*): страницы проекта красят себя по-разному, а шапка
+ * должна выглядеть одинаково на всех — в том числе в светлой теме.
+ * Если какой-то странице нужно подогнать цвета под себя, она объявляет свои --ub-*.
+ */
+
+:root{
+  --ub-chip:#1b2027;      /* фон кнопок */
+  --ub-line:#2b323c;      /* рамка */
+  --ub-line2:#3a5a7d;     /* рамка при наведении и фокусе */
+  --ub-tx:#e3e7ec;        /* текст и значки */
+  --ub-tx2:#8c96a3;       /* текст «Войти» */
+  --ub-ok:#3fbf7f;        /* точка «на связи» */
+  --ub-bad:#c0575f;       /* точка «сервер молчит» */
+  --ub-dot:#5a6470;       /* точка «неизвестно» */
+}
+html[data-theme="light"]{
+  --ub-chip:#f1f4f9;
+  --ub-line:#d9e0ea;
+  --ub-line2:#9dc0e2;
+  --ub-tx:#171d25;
+  --ub-tx2:#55606d;
+  --ub-ok:#17a35c;
+  --ub-bad:#c0393f;
+  --ub-dot:#98a3b0;
+}
+
+/* ---------- сама полоса ---------- */
+.uibar{display:inline-flex;align-items:center;gap:6px;min-width:0;vertical-align:middle;
+  font:600 12.5px/1 -apple-system,'Segoe UI',Roboto,system-ui,sans-serif;-webkit-text-size-adjust:100%}
+.uibar .ub-grow{flex:1 1 auto;min-width:0}
+
+/* ---------- логотип = кнопка «домой» (как значок Google) ---------- */
+.ub-logo{flex:0 0 auto;display:inline-block;width:28px;height:28px;border-radius:50%;
+  text-decoration:none;line-height:0;transition:opacity .15s}
+.ub-logo img{width:28px;height:28px;display:block;border-radius:50%}
+.ub-logo:hover{opacity:.82}
+.ub-logo:focus-visible{outline:2px solid var(--ub-line2);outline-offset:2px}
+
+/* ---------- кнопки-значки (тема) ---------- */
+.ub-ico{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;
+  padding:0;border-radius:9px;background:var(--ub-chip);border:1px solid var(--ub-line);color:var(--ub-tx);
+  font:inherit;font-size:14px;line-height:1;cursor:pointer;-webkit-appearance:none;appearance:none}
+.ub-ico:hover{border-color:var(--ub-line2)}
+.ub-ico:focus-visible{outline:2px solid var(--ub-line2);outline-offset:1px}
+
+/* ---------- язык: список из двух букв (en, ru, …) ---------- */
+.ub-sel{flex:0 0 auto;font:inherit;font-size:12.5px;line-height:1.2;padding:5px 18px 5px 8px;border-radius:9px;
+  background-color:var(--ub-chip);color:var(--ub-tx2);border:1px solid var(--ub-line);cursor:pointer;
+  -webkit-appearance:none;appearance:none;text-align:center;text-transform:lowercase;
+  background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);
+  background-position:calc(100% - 9px) 52%,calc(100% - 5px) 52%;background-size:4px 4px,4px 4px;background-repeat:no-repeat}
+.ub-sel:hover{color:var(--ub-tx);border-color:var(--ub-line2)}
+.ub-sel:focus{outline:none;border-color:var(--ub-line2)}
+.ub-sel option{text-transform:none;color:var(--ub-tx);background:var(--ub-chip)}
+
+/* ---------- аккаунт: имя с точкой или «Войти» ---------- */
+.ub-acc{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;max-width:170px;padding:5px 9px;
+  border-radius:9px;background:var(--ub-chip);border:1px solid var(--ub-line);color:var(--ub-tx);
+  text-decoration:none;white-space:nowrap;cursor:pointer}
+.ub-acc:hover{border-color:var(--ub-line2)}
+.ub-acc:focus-visible{outline:2px solid var(--ub-line2);outline-offset:1px}
+.ub-acc .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.ub-acc .ub-dot{flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:var(--ub-dot)}
+.ub-acc .ub-dot.on{background:var(--ub-ok);box-shadow:0 0 0 3px rgba(63,191,127,.16)}
+.ub-acc .ub-dot.off{background:var(--ub-bad);box-shadow:0 0 0 3px rgba(192,87,95,.16)}
+.ub-in{color:var(--ub-tx2);font-weight:600}
+
+/* ---------- свои элементы страницы (UI.add) ---------- */
+.ub-btn{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:9px;
+  background:var(--ub-chip);border:1px solid var(--ub-line);color:var(--ub-tx);text-decoration:none;
+  font:inherit;font-size:12.5px;line-height:1.2;cursor:pointer;-webkit-appearance:none;appearance:none}
+.ub-btn:hover{border-color:var(--ub-line2)}
+
+/* ---------- телефон: пальцем ---------- */
+@media (pointer:coarse){
+  .ub-logo,.ub-logo img,.ub-ico{width:32px;height:32px}
+  .ub-ico{font-size:15px}
+  .ub-sel{padding:7px 18px 7px 9px}
+  .ub-acc,.ub-btn{padding:7px 10px}
+}
+@media (max-width:520px){
+  /* на телефоне от аккаунта остаётся точка-огонёк (как аватар без подписи) */
+  .ub-acc:not(.ub-in) .nm{display:none}
+  .ub-acc:not(.ub-in){padding:7px}
+}
