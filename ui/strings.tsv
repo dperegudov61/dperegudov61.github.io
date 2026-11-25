@@ -1,0 +1,11 @@
+key	en	ru
+ui.home	Home page	Главная страница
+ui.account	Account	Аккаунт
+ui.signin	Sign in	Войти
+ui.theme	Theme	Тема
+ui.theme.dark	Dark	Тёмная
+ui.theme.light	Light	Светлая
+ui.theme.auto	System	Как в системе
+ui.lang	Language	Язык
+lang.en	English	Английский
+lang.ru	Russian	Русский
