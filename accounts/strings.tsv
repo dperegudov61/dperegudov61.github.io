@@ -1,0 +1,40 @@
+key	en	ru
+lang.en	English	Английский
+lang.ru	Russian	Русский
+ui.theme	Theme	Тема
+ui.theme.dark	Dark	Тёмная
+ui.theme.light	Light	Светлая
+ui.theme.auto	System	Как в системе
+ui.lang	Language	Язык
+ui.home	Home page	Главная страница
+login.title	Sign in · AI and Human Messenger	Вход · AI and Human Messenger
+login.head	AI chat	AI-чат
+login.sub	Sign in to AI and Human Messenger. The chat itself runs on a home PC.	Вход в AI and Human Messenger. Сам чат работает на домашнем ПК.
+login.checking	checking server…	проверяю сервер…
+login.user	Name	Имя
+login.pass	Password	Пароль
+login.remember	remember this device	запомнить это устройство
+login.go	Sign in	Войти
+login.note.signup	Only the server owner can create accounts — there is no sign-up here.	Вход выдаёт владелец сервера — новых пользователей здесь не создают.
+login.note.off	If the server is off, this page says so: turn on the «2. Server» window on the PC.	Если сервер выключен, страница об этом скажет: включите окно «2. Сервер» на ПК.
+login.forget	forget this device	забыть это устройство
+login.st.retry	server is not answering yet — trying again…	сервер пока не отвечает — пробую ещё раз…
+login.st.down	server is not responding	сервер не отвечает
+login.st.up	server is online	сервер на связи
+login.msg.tunnel	connection lost, the server changed address — signing in again	связь пропала, сервер сменил адрес — входим заново
+login.msg.key	signing in with the saved key…	вхожу по сохранённому ключу…
+login.msg.keydead	the saved sign-in no longer works — enter your password	сохранённый вход больше не действует — введите пароль
+login.msg.half	connection dropped halfway — press “Sign in” or reload the page	связь оборвалась на полпути — нажмите «Войти» или обновите страницу
+login.msg.pcoff	the PC is off or the tunnel is restarting — reload in half a minute	ПК сейчас выключен или туннель перезапускается — обновите страницу через полминуты
+login.msg.have	already signed in — opening the chat…	вход уже есть — открываю чат…
+login.msg.lost	connection lost and this device has no saved sign-in — enter name and password	связь пропала, а вход на этом устройстве не сохранён — введите имя и пароль
+login.msg.down2	server is not responding — turn on the PC («2. Server» window) and reload the page	сервер не отвечает — включите ПК (окно «2. Сервер») и обновите страницу
+login.err.name	enter a name	введите имя
+login.err.pass	enter a password	введите пароль
+login.btn.checking	Checking…	Проверяю…
+login.err.bad	wrong name or password	неверное имя или пароль
+login.err.origin	this server address is not allowed — tell the owner	этот адрес сервера не разрешён — напишите владельцу
+login.err.half2	connection dropped halfway — press “Sign in” again	связь оборвалась на полпути — нажмите «Войти» ещё раз
+login.err.down	server is not responding — turn on the «2. Server» window on the PC	сервер не отвечает — включите окно «2. Сервер» на ПК
+login.msg.forgot	this device no longer remembers the sign-in	это устройство больше не помнит вход
+login.signing	signing in as 	вхожу как 
