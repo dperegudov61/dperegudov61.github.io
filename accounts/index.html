@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
-<title>Вход · AI and Human Messenger</title>
+<title data-i18n="login.title">Sign in · AI and Human Messenger</title>
 <meta name="theme-color" content="#101317">
-<script src="../theme.js"></script>
+<script src="../theme.js" data-i18n="strings.tsv"></script>
 <style>/* ---------- палитра: тёмная (по умолчанию) и светлая ----------
    Все цвета страницы берутся только отсюда; тему переключает атрибут
    data-theme на <html> (его ставит ../theme.js). */
@@ -64,29 +64,29 @@ button:disabled{opacity:.55;cursor:default}
 <body>
 <div class="card">
   <div class="head">
-    <h1>AI-чат</h1>
+    <h1 data-i18n="login.head">AI chat</h1>
     <span class="ui-sw" data-ui="switch"></span>
   </div>
-  <div class="sub">Вход в AI and Human Messenger. Сам чат работает на домашнем ПК.</div>
+  <div class="sub" data-i18n="login.sub">Sign in to AI and Human Messenger. The chat itself runs on a home PC.</div>
 
-  <div class="st"><span class="dot" id="dot"></span><span id="stext">проверяю сервер…</span></div>
+  <div class="st"><span class="dot" id="dot"></span><span id="stext" data-i18n="login.checking">checking server…</span></div>
 
   <form id="f" autocomplete="on">
-    <label for="u">Имя</label>
+    <label for="u" data-i18n="login.user">Name</label>
     <input id="u" type="text" name="username" autocomplete="username" maxlength="24" autocapitalize="none" spellcheck="false">
-    <label for="p">Пароль</label>
+    <label for="p" data-i18n="login.pass">Password</label>
     <input id="p" type="password" name="password" autocomplete="current-password">
-    <label class="rem"><input type="checkbox" id="rm" checked> запомнить это устройство</label>
-    <button id="go" type="submit">Войти</button>
+    <label class="rem"><input type="checkbox" id="rm" checked><span data-i18n="login.remember">remember this device</span></label>
+    <button id="go" type="submit" data-i18n="login.go">Sign in</button>
   </form>
 
   <div class="err" id="err"></div>
   <div class="ok" id="okmsg"></div>
 
   <div class="foot">
-    Вход выдаёт владелец сервера — новых пользователей здесь не создают.<br>
-    Если сервер выключен, страница об этом скажет: включите окно «2. Сервер» на ПК.<br>
-    <a href="#" id="forget" style="display:none">забыть это устройство</a>
+    <span data-i18n="login.note.signup">Only the server owner can create accounts — there is no sign-up here.</span><br>
+    <span data-i18n="login.note.off">If the server is off, this page says so: turn on the «2. Server» window on the PC.</span><br>
+    <a href="#" id="forget" style="display:none" data-i18n="login.forget">forget this device</a>
   </div>
 </div>
 
@@ -271,15 +271,15 @@ function withServer(attempt, fn, onFail){
   return findLive().then(function(url){
     if (!url) {
       if (attempt < 3) {
-        setState('', 'сервер пока не отвечает — пробую ещё раз…');
+        setState('', t("login.st.retry", "server is not answering yet — trying again…"));
         return wait(2000).then(function(){ return withServer(attempt + 1, fn, onFail); });
       }
-      setState('off', 'сервер не отвечает');
+      setState('off', t("login.st.down", "server is not responding"));
       if (onFail) onFail();
       return null;
     }
     lss(URLKEY, url);
-    setState('on', 'сервер на связи');
+    setState('on', t("login.st.up", "server is online"));
     return fn(url);
   });
 }
@@ -344,14 +344,14 @@ function showForm(){
 
 function boot(){
   takeKeyFromPath();                     // ключ из личной ссылки важнее всего остального
-  if(/[?&]r=tunnel/.test(location.search)) err('связь пропала, сервер сменил адрес — входим заново');
+  if(/[?&]r=tunnel/.test(location.search)) err(t("login.msg.tunnel", "connection lost, the server changed address — signing in again"));
   var saved = ls(KEY);
   if (saved && !looksLikeKey(saved)) { lsd(KEY); saved = ''; }
 
   if (saved) {
     $('forget').style.display = 'inline';
     $('f').style.display = 'none';
-    setState('', 'вхожу по сохранённому ключу…');
+    setState('', t("login.msg.key", "signing in with the saved key…"));
     withServer(0, function(url){
       return doorAuth(url, { key: saved }).then(function(res){
         if (res.ok && res.ticket) { lss('door.user', res.user || ''); enter(url, res.ticket); return; }
@@ -360,15 +360,15 @@ function boot(){
           lsd(KEY);
           $('forget').style.display = 'none';
           showForm();
-          err('сохранённый вход больше не действует — введите пароль');
+          err(t("login.msg.keydead", "the saved sign-in no longer works — enter your password"));
           return;
         }
         showForm();
-        err('связь оборвалась на полпути — нажмите «Войти» или обновите страницу');
+        err(t("login.msg.half", "connection dropped halfway — press “Sign in” or reload the page"));
       });
     }, function(){
       showForm();
-      err('ПК сейчас выключен или туннель перезапускается — обновите страницу через полминуты');
+      err(t("login.msg.pcoff", "the PC is off or the tunnel is restarting — reload in half a minute"));
     });
     return;
   }
@@ -380,7 +380,7 @@ function boot(){
   var tk = ls('door.token');
   if (tk) {
     $('f').style.display = 'none';
-    setState('', 'вход уже есть — открываю чат…');
+    setState('', t("login.msg.have", "already signed in — opening the chat…"));
     withServer(0, function(url){
       return fetchJSON(url + '/__door/me', { headers: { 'Authorization': 'Bearer ' + tk } }, 9000)
         .then(function(r){
@@ -391,15 +391,15 @@ function boot(){
         });
     }, function(){
       showForm();
-      err('ПК сейчас выключен или туннель перезапускается — обновите страницу через полминуты');
+      err(t("login.msg.pcoff", "the PC is off or the tunnel is restarting — reload in half a minute"));
     });
     return;
   }
 
-  if(lost) err('связь пропала, а вход на этом устройстве не сохранён — введите имя и пароль');
+  if(lost) err(t("login.msg.lost", "connection lost and this device has no saved sign-in — enter name and password"));
   withServer(0, function(){ return null; }, function(){
-    if(lost) err('сервер не отвечает — включите ПК (окно «2. Сервер») и обновите страницу');
-    else err('ПК сейчас выключен или туннель перезапускается — обновите страницу через полминуты');
+    if(lost) err(t("login.msg.down2", "server is not responding — turn on the PC («2. Server» window) and reload the page"));
+    else err(t("login.msg.pcoff", "the PC is off or the tunnel is restarting — reload in half a minute"));
   });
 }
 
@@ -411,13 +411,13 @@ $('f').addEventListener('submit', function(e){
   var remember = !!$('rm').checked;
   err(''); ok('');
 
-  if (!login) { err('введите имя'); $('u').focus(); return; }
-  if (!pass) { err('введите пароль'); $('p').focus(); return; }
+  if (!login) { err(t("login.err.name", "enter a name")); $('u').focus(); return; }
+  if (!pass) { err(t("login.err.pass", "enter a password")); $('p').focus(); return; }
 
   var b = $('go');
   b.disabled = true;
   var was = b.textContent;
-  b.textContent = 'Проверяю…';
+  b.textContent = t("login.btn.checking", "Checking…");
 
   function stop(msg){
     b.disabled = false; b.textContent = was;
@@ -429,19 +429,19 @@ $('f').addEventListener('submit', function(e){
   withServer(0, function(url){
     return doorAuth(url, { login: login, pass: pass, remember: remember }).then(function(res){
       if (!res.ok) {
-        if (res.code === 401) stop(res.error || 'неверное имя или пароль');
-        else if (res.code === 403) stop('этот адрес сервера не разрешён — напишите владельцу');
-        else stop('связь оборвалась на полпути — нажмите «Войти» ещё раз');
+        if (res.code === 401) stop(res.error || t("login.err.bad", "wrong name or password"));
+        else if (res.code === 403) stop(t("login.err.origin", "this server address is not allowed — tell the owner"));
+        else stop(t("login.err.half2", "connection dropped halfway — press “Sign in” again"));
         return;
       }
       if (res.key) lss(KEY, res.key);
-      ok('вхожу как ' + (res.user || login) + '…');
+      ok(t('login.signing', 'signing in as ') + (res.user || login) + '…');
       // тема и язык: у человека они на сервере — забираем сразу, чтобы чат открылся в них
       if (window.UI && res.token) UI.sync(url, res.token);
       enter(url, res.ticket);
     });
   }, function(){
-    stop('сервер не отвечает — включите окно «2. Сервер» на ПК');
+    stop(t("login.err.down", "server is not responding — turn on the «2. Server» window on the PC"));
   });
 });
 
@@ -451,7 +451,7 @@ $('forget').addEventListener('click', function(e){
   $('forget').style.display = 'none';
   $('okmsg').textContent = '';
   showForm();
-  err('это устройство больше не помнит вход');
+  err(t("login.msg.forgot", "this device no longer remembers the sign-in"));
   withServer(0, function(){ return null; }, null);
 });
 
