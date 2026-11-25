@@ -1,12 +1,4 @@
 key	en	ru
-lang.en	English	Английский
-lang.ru	Russian	Русский
-ui.theme	Theme	Тема
-ui.theme.dark	Dark	Тёмная
-ui.theme.light	Light	Светлая
-ui.theme.auto	System	Как в системе
-ui.lang	Language	Язык
-ui.home	Home page	Главная страница
 home.title	Dmitry Peregudov — project page	Перегудов Дмитрий Владимирович — страница проектов
 home.name	Dmitry Vladimirovich Peregudov	Перегудов Дмитрий Владимирович
 home.sub	Project page	Страница проектов
