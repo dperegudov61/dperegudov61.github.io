@@ -7,47 +7,76 @@
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#101317">
 <title>Аккаунт · AI and Human Messenger</title>
-<style>
+<script src="../theme.js"></script>
+<style>/* ---------- палитра: тёмная (по умолчанию) и светлая ----------
+   Все цвета страницы берутся только отсюда; тему переключает атрибут
+   data-theme на <html> (его ставит ../theme.js). */
+:root{
+  color-scheme:dark;
+  --bg:#101317; --card:#181c22; --chip:#1b2027; --input:#0d1014;
+  --line:#262c35; --line2:#2b323c; --focus:#4a8fd8;
+  --tx:#e3e7ec; --tx2:#8b949c; --tx3:#69737f;
+  --acc:#2f7fd0; --acc2:#3a8de0; --accTx:#fff;
+  --raise:#2b323c; --raise2:#333b47;
+  --lnk:#6aa9e6; --dot:#4a5260; --ok:#4dbf74; --okTx:#7fd3a5;
+  --bad:#c0575f; --badTx:#e88b92;
+  --danger:#7b2b32; --danger2:#8e333b; --dangerTx:#ffd7d7;
+  --overlay:rgba(11,14,18,.96); --mtc:#101317;
+}
+html[data-theme="light"]{
+  color-scheme:light;
+  --bg:#f4f6fa; --card:#ffffff; --chip:#f1f4f9; --input:#ffffff;
+  --line:#e3e8f0; --line2:#d9e0ea; --focus:#2f7fd0;
+  --tx:#171d25; --tx2:#55606d; --tx3:#5f6b78;
+  --acc:#2f7fd0; --acc2:#2a74c2; --accTx:#fff;
+  --raise:#e8edf4; --raise2:#dfe5ee;
+  --lnk:#1c69b8; --dot:#98a3b0; --ok:#17a35c; --okTx:#157347;
+  --bad:#c0393f; --badTx:#b3261e;
+  --danger:#c62828; --danger2:#b3261e; --dangerTx:#fff;
+  --overlay:rgba(244,247,251,.96); --mtc:#f4f6fa;
+}
+
 *{box-sizing:border-box}
-body{margin:0;background:#101317;color:#e3e7ec;
+body{margin:0;background:var(--bg);color:var(--tx);
   font:15px/1.5 -apple-system,'Segoe UI',Roboto,system-ui,sans-serif;-webkit-text-size-adjust:100%}
-a{color:#6aa9e6}
+a{color:var(--lnk)}
 .wrap{max-width:460px;margin:0 auto;padding:28px 16px 40px;
   padding-top:calc(28px + env(safe-area-inset-top));padding-bottom:calc(40px + env(safe-area-inset-bottom))}
 .head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .head h1{font-size:20px;margin:0;letter-spacing:-.2px;flex:1}
-.head a{font-size:13px;text-decoration:none;background:#1b2027;border:1px solid #2b323c;border-radius:10px;padding:7px 11px;color:#bdc7d3}
-.card{background:#181c22;border:1px solid #262c35;border-radius:16px;padding:16px 16px 14px;margin:0 0 12px}
+.head a{font-size:13px;text-decoration:none;background:var(--chip);border:1px solid var(--line2);border-radius:10px;padding:7px 11px;color:var(--tx2)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 16px 14px;margin:0 0 12px}
 .card h2{margin:0 0 4px;font-size:15px}
-.card .hint{color:#8b949c;font-size:12.5px;margin:0 0 12px}
+.card .hint{color:var(--tx2);font-size:12.5px;margin:0 0 12px}
 .who{display:flex;align-items:center;gap:10px;margin:0 0 6px}
 .who .nm{font-size:18px;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dot{width:9px;height:9px;border-radius:50%;background:#4a5260;flex:0 0 auto}
-.dot.on{background:#4dbf74;box-shadow:0 0 0 3px rgba(77,191,116,.16)}
-.dot.off{background:#c0575f}
-.meta{color:#8b949c;font-size:12.5px}
-.meta code{color:#dfe3e8;font-variant-numeric:tabular-nums}
-label{display:block;font-size:12.5px;color:#8b949c;margin:10px 0 5px}
-input{width:100%;padding:12px;border-radius:11px;border:1px solid #2b323c;
-  background:#0d1014;color:#e3e7ec;font:inherit;outline:none}
-input:focus{border-color:#4a8fd8}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--dot);flex:0 0 auto}
+.dot.on{background:var(--ok);box-shadow:0 0 0 3px rgba(77,191,116,.16)}
+.dot.off{background:var(--bad)}
+.meta{color:var(--tx2);font-size:12.5px}
+.meta code{color:var(--tx);font-variant-numeric:tabular-nums}
+.uirow{margin:10px 0 2px}
+label{display:block;font-size:12.5px;color:var(--tx2);margin:10px 0 5px}
+input{width:100%;padding:12px;border-radius:11px;border:1px solid var(--line2);
+  background:var(--input);color:var(--tx);font:inherit;outline:none}
+input:focus{border-color:var(--focus)}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
-.btn{background:#2f7fd0;border:0;color:#fff;border-radius:11px;padding:11px 16px;font:inherit;font-weight:600;cursor:pointer;min-height:44px}
-.btn:hover{background:#3a8de0}
-.btn.ghost{background:#2b323c;color:#dfe3e8}
-.btn.ghost:hover{background:#333b47}
-.btn.danger{background:#7b2b32;color:#ffd7d7}
-.btn.danger:hover{background:#8e333b}
+.btn{background:var(--acc);border:0;color:#fff;border-radius:11px;padding:11px 16px;font:inherit;font-weight:600;cursor:pointer;min-height:44px}
+.btn:hover{background:var(--acc2)}
+.btn.ghost{background:var(--raise);color:var(--tx)}
+.btn.ghost:hover{background:var(--raise2)}
+.btn.danger{background:var(--danger);color:var(--dangerTx)}
+.btn.danger:hover{background:var(--danger2)}
 .btn:disabled{opacity:.5;cursor:default}
-.st{margin-top:10px;font-size:13px;min-height:19px;color:#8b949c}
-.st.ok{color:#7fd3a5}
-.st.bad{color:#e88b92}
-.foot{margin-top:20px;color:#69737f;font-size:12px;line-height:1.7}
-#login{position:fixed;inset:0;background:#0b0e12f5;display:none;align-items:center;justify-content:center;padding:22px;z-index:30;text-align:center}
+.st{margin-top:10px;font-size:13px;min-height:19px;color:var(--tx2)}
+.st.ok{color:var(--okTx)}
+.st.bad{color:var(--badTx)}
+.foot{margin-top:20px;color:var(--tx3);font-size:12px;line-height:1.7}
+#login{position:fixed;inset:0;background:var(--overlay);display:none;align-items:center;justify-content:center;padding:22px;z-index:30;text-align:center}
 #login.on{display:flex}
 #login .bx{max-width:380px}
 #login h2{margin:0 0 8px;font-size:18px}
-#login p{color:#9aa4b0;margin:0 0 16px;font-size:13.5px}
+#login p{color:var(--tx3);margin:0 0 16px;font-size:13.5px}
 #login a.btn{display:inline-block;text-decoration:none;text-align:center}
 #del{display:none}
 #del.on{display:block}
@@ -63,6 +92,7 @@ input:focus{border-color:#4a8fd8}
   <div class="card">
     <div class="who"><span class="dot" id="dot"></span><span class="nm" id="myname">…</span></div>
     <div class="meta" id="mymeta">ищу сервер…</div>
+    <div class="uirow"><span class="ui-sw" data-ui="switch"></span></div>
   </div>
 
   <div class="card">
@@ -312,6 +342,8 @@ function boot() {
       myPass = !!j.pass;
       try { lss('door.user', me); } catch (e) {}
       renderWho();
+      // тема и язык: сервер главнее кеша этого устройства
+      if (window.UI) UI.sync(base, tok);
     });
   }, function () { showLogin('Сервер не отвечает — включите ПК.'); });
 }
