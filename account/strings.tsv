@@ -1,12 +1,4 @@
 key	en	ru
-lang.en	English	Английский
-lang.ru	Russian	Русский
-ui.theme	Theme	Тема
-ui.theme.dark	Dark	Тёмная
-ui.theme.light	Light	Светлая
-ui.theme.auto	System	Как в системе
-ui.lang	Language	Язык
-ui.home	Home page	Главная страница
 acc.title	Account · AI and Human Messenger	Аккаунт · AI and Human Messenger
 acc.head	Account settings	Настройки аккаунта
 acc.back	← to chat	← в чат
