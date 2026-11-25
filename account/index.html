@@ -7,10 +7,10 @@
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#101317">
 <title data-i18n="acc.title">Account · AI and Human Messenger</title>
-<script src="../theme.js" data-i18n="strings.tsv"></script>
+<script src="/ui/ui.js" data-i18n="strings.tsv" data-account="0"></script>
 <style>/* ---------- палитра: тёмная (по умолчанию) и светлая ----------
    Все цвета страницы берутся только отсюда; тему переключает атрибут
-   data-theme на <html> (его ставит ../theme.js). */
+   data-theme на <html> (его ставит общий шаблон /ui/ui.js). */
 :root{
   color-scheme:dark;
   --bg:#101317; --card:#181c22; --chip:#1b2027; --input:#0d1014;
@@ -44,7 +44,7 @@ a{color:var(--lnk)}
   padding-top:calc(28px + env(safe-area-inset-top));padding-bottom:calc(40px + env(safe-area-inset-bottom))}
 .head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .head h1{font-size:20px;margin:0;letter-spacing:-.2px;flex:1}
-.head a{font-size:13px;text-decoration:none;background:var(--chip);border:1px solid var(--line2);border-radius:10px;padding:7px 11px;color:var(--tx2)}
+.head>a{font-size:13px;text-decoration:none;background:var(--chip);border:1px solid var(--line2);border-radius:10px;padding:7px 11px;color:var(--tx2)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 16px 14px;margin:0 0 12px}
 .card h2{margin:0 0 4px;font-size:15px}
 .card .hint{color:var(--tx2);font-size:12.5px;margin:0 0 12px}
@@ -86,13 +86,14 @@ input:focus{border-color:var(--focus)}
 <div class="wrap">
   <div class="head">
     <h1 data-i18n="acc.head">Account settings</h1>
+    <!-- шапка шаблона: логотип, тема, язык (аккаунт на этой странице не нужен) -->
+    <div class="uibar" data-ui="bar"></div>
     <a href="../AI-Human-Messenger/" data-i18n="acc.back">← to chat</a>
   </div>
 
   <div class="card">
     <div class="who"><span class="dot" id="dot"></span><span class="nm" id="myname">…</span></div>
     <div class="meta" id="mymeta" data-i18n="acc.searching">looking for server…</div>
-    <div class="uirow"><span class="ui-sw" data-ui="switch"></span></div>
   </div>
 
   <div class="card">
