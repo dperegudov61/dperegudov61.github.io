@@ -6,8 +6,8 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#101317">
-<title>Аккаунт · AI and Human Messenger</title>
-<script src="../theme.js"></script>
+<title data-i18n="acc.title">Account · AI and Human Messenger</title>
+<script src="../theme.js" data-i18n="strings.tsv"></script>
 <style>/* ---------- палитра: тёмная (по умолчанию) и светлая ----------
    Все цвета страницы берутся только отсюда; тему переключает атрибут
    data-theme на <html> (его ставит ../theme.js). */
@@ -85,70 +85,70 @@ input:focus{border-color:var(--focus)}
 <body>
 <div class="wrap">
   <div class="head">
-    <h1>Настройки аккаунта</h1>
-    <a href="../AI-Human-Messenger/">← в чат</a>
+    <h1 data-i18n="acc.head">Account settings</h1>
+    <a href="../AI-Human-Messenger/" data-i18n="acc.back">← to chat</a>
   </div>
 
   <div class="card">
     <div class="who"><span class="dot" id="dot"></span><span class="nm" id="myname">…</span></div>
-    <div class="meta" id="mymeta">ищу сервер…</div>
+    <div class="meta" id="mymeta" data-i18n="acc.searching">looking for server…</div>
     <div class="uirow"><span class="ui-sw" data-ui="switch"></span></div>
   </div>
 
   <div class="card">
-    <h2>Ник</h2>
-    <p class="hint">Так вас видят другие люди в списках и диалогах. Чаты и картинки переедут вместе с ником.</p>
-    <label for="nname">Новый ник</label>
+    <h2 data-i18n="acc.nick">Nickname</h2>
+    <p class="hint" data-i18n="acc.nick.hint">This is how other people see you in lists and dialogs. Chats and pictures move with the nickname.</p>
+    <label for="nname" data-i18n="acc.nick.new">New nickname</label>
     <input id="nname" type="text" maxlength="24" autocomplete="nickname" spellcheck="false">
-    <div class="row"><button class="btn" id="bname" type="button">Сохранить ник</button></div>
+    <div class="row"><button class="btn" id="bname" type="button" data-i18n="acc.nick.save">Save nickname</button></div>
     <div class="st" id="nst"></div>
   </div>
 
   <div class="card">
-    <h2>Пароль</h2>
-    <p class="hint">После смены пароля старые ссылки на вход перестанут работать, а другие устройства попросят войти заново. Это устройство останется в чате.</p>
-    <label for="p1">Новый пароль</label>
+    <h2 data-i18n="acc.pass">Password</h2>
+    <p class="hint" data-i18n="acc.pass.hint">After a password change old sign-in links stop working and other devices ask to sign in again. This device stays in the chat.</p>
+    <label for="p1" data-i18n="acc.pass.new">New password</label>
     <input id="p1" type="password" autocomplete="new-password" maxlength="64">
-    <label for="p2">Повторите пароль</label>
+    <label for="p2" data-i18n="acc.pass.repeat">Repeat password</label>
     <input id="p2" type="password" autocomplete="new-password" maxlength="64">
-    <div class="row"><button class="btn" id="bpass" type="button">Сменить пароль</button></div>
+    <div class="row"><button class="btn" id="bpass" type="button" data-i18n="acc.pass.save">Change password</button></div>
     <div class="st" id="pst"></div>
   </div>
 
   <div class="card">
-    <h2>Выход</h2>
-    <p class="hint">Выйти на этом устройстве. Остальные входы не затрагиваются.</p>
+    <h2 data-i18n="acc.exit">Sign out</h2>
+    <p class="hint" data-i18n="acc.exit.hint">Sign out on this device. Other sign-ins stay.</p>
     <div class="row">
-      <button class="btn ghost" id="blogout" type="button">Выйти</button>
+      <button class="btn ghost" id="blogout" type="button" data-i18n="acc.exit.go">Sign out</button>
     </div>
     <div class="st" id="lst"></div>
   </div>
 
   <div class="card">
-    <h2>Удаление аккаунта</h2>
-    <p class="hint" id="delhint">Аккаунт и входы удаляются навсегда. Диалоги уедут в корзину на сервере (data\trash) — вернуть их сможет владелец ПК.</p>
-    <div class="row"><button class="btn danger" id="bdelopen" type="button">Удалить учётную запись</button></div>
+    <h2 data-i18n="acc.del">Delete account</h2>
+    <p class="hint" id="delhint" data-i18n="acc.del.hint">The account and sign-ins are deleted for good. Dialogs go to the server recycle bin (data\trash) — only the PC owner can bring them back.</p>
+    <div class="row"><button class="btn danger" id="bdelopen" type="button" data-i18n="acc.del.go">Delete account</button></div>
     <div id="del">
-      <label for="dp">Пароль для подтверждения</label>
+      <label for="dp" data-i18n="acc.del.pass">Password to confirm</label>
       <input id="dp" type="password" autocomplete="current-password" maxlength="64">
       <div class="row">
-        <button class="btn danger" id="bdel" type="button">Удалить навсегда</button>
-        <button class="btn ghost" id="bdelcancel" type="button">Отмена</button>
+        <button class="btn danger" id="bdel" type="button" data-i18n="acc.del.forever">Delete for good</button>
+        <button class="btn ghost" id="bdelcancel" type="button" data-i18n="acc.cancel">Cancel</button>
       </div>
     </div>
     <div class="st" id="dst"></div>
   </div>
 
   <div class="foot">
-    Ссылку на вход и тип учётной записи может выдать только владелец сервера — здесь этих кнопок нет.<br>
-    <a href="../AI-Human-Messenger/">вернуться в чат</a>
+    <span data-i18n="acc.foot">Only the server owner can issue a sign-in link and the account type — those buttons are not here.</span><br>
+    <a href="../AI-Human-Messenger/" data-i18n="acc.foot.back">back to chat</a>
   </div>
 </div>
 
 <div id="login"><div class="bx">
-  <h2>Нужен вход</h2>
-  <p id="lmsg">Настройки открываются после входа — как и сам чат.</p>
-  <a class="btn" id="lgo" href="../accounts/">Войти</a>
+  <h2 data-i18n="acc.login.need">Sign in needed</h2>
+  <p id="lmsg" data-i18n="acc.login.msg">Settings open after sign-in — just like the chat.</p>
+  <a class="btn" id="lgo" href="../accounts/" data-i18n="acc.login.go">Sign in</a>
   <div class="st" id="lerr"></div>
 </div></div>
 
@@ -180,8 +180,8 @@ function st(el, text, cls) {
 
 // что показать, когда сервер не принял запрос
 function why(r, j) {
-  if (!r || r.status === 0) return 'связь оборвалась — нажмите ещё раз';
-  return (j && j.error) || ('не получилось (HTTP ' + r.status + ')');
+  if (!r || r.status === 0) return t("acc.err.conn", "connection dropped — press again");
+  return (j && j.error) || (t("acc.err.http", "failed (HTTP ") + r.status + ')');
 }
 
 // ---------- адрес сервера ----------
@@ -300,7 +300,7 @@ function api(path, opt) {
 }
 
 function showLogin(msg) {
-  $('lmsg').textContent = msg || 'Настройки открываются после входа — как и сам чат.';
+  $('lmsg').textContent = msg || t("acc.login.msg", "Settings open after sign-in — just like the chat.");
   $('lgo').href = GH + '/accounts/?next=' + encodeURIComponent(location.origin + location.pathname);
   $('login').className = 'on';
   $('dot').className = 'dot off';
@@ -311,8 +311,8 @@ function renderWho() {
   $('myname').title = me || '';
   var bits = [];
   if (myId) bits.push('id <code>' + myId + '</code>');
-  bits.push(myAdmin ? 'администратор' : 'обычная учётная запись');
-  if (!myPass) bits.push('пароль не задан');
+  bits.push(myAdmin ? t("acc.role.admin", "administrator") : t("acc.role.user", "regular account"));
+  if (!myPass) bits.push(t("acc.no.pass", "no password set"));
   $('mymeta').innerHTML = bits.join(' · ');
   $('dot').className = 'dot on';
   $('nname').value = me || '';
@@ -321,8 +321,8 @@ function renderWho() {
 function boot() {
   findLive().then(function (url) {
     if (!url) {
-      showLogin('Сервер не отвечает — включите ПК (окно «2. Сервер») и обновите страницу.');
-      st($('nst'), 'нет связи с сервером', 'bad');
+      showLogin(t("acc.err.off", "Server is not responding — turn on the PC («2. Server» window) and reload the page."));
+      st($('nst'), t("acc.no.conn", "no connection to the server"), 'bad');
       return;
     }
     base = url.replace(/\/+$/, '');
@@ -332,8 +332,8 @@ function boot() {
     api('/__acc/me', { ms: 12000 }).then(function (r) {
       var j = r.json || {};
       if (!r.ok || !j.ok) {
-        if (r.status === 401 || r.status === 403) { lsd(TOK); showLogin('Вход на этом устройстве больше не действует — войдите заново.'); }
-        else showLogin(j.error || 'Сервер не ответил — обновите страницу.');
+        if (r.status === 401 || r.status === 403) { lsd(TOK); showLogin(t("acc.login.dead", "The sign-in on this device no longer works — sign in again.")); }
+        else showLogin(j.error || t("acc.err.noreply", "The server did not answer — reload the page."));
         return;
       }
       me = j.user || j.real || '';
@@ -345,17 +345,17 @@ function boot() {
       // тема и язык: сервер главнее кеша этого устройства
       if (window.UI) UI.sync(base, tok);
     });
-  }, function () { showLogin('Сервер не отвечает — включите ПК.'); });
+  }, function () { showLogin(t("acc.err.off2", "Server is not responding — turn on the PC.")); });
 }
 
 // ---------- ник ----------
 $('bname').onclick = function () {
   var v = $('nname').value.trim();
   var el = $('nst');
-  if (!v) { st(el, 'ник не может быть пустым', 'bad'); return; }
-  if (v === me) { st(el, 'это ваш текущий ник', ''); return; }
+  if (!v) { st(el, t("acc.err.nick.empty", "the nickname cannot be empty"), 'bad'); return; }
+  if (v === me) { st(el, t("acc.nick.same", "this is your current nickname"), ''); return; }
   var b = $('bname');
-  b.disabled = true; st(el, 'сохраняю…', '');
+  b.disabled = true; st(el, t("acc.saving", "saving…"), '');
   api('/__acc/name', { method: 'POST', body: JSON.stringify({ name: v }) }).then(function (r) {
     b.disabled = false;
     var j = r.json || {};
@@ -363,17 +363,17 @@ $('bname').onclick = function () {
     me = j.name; myId = j.id || myId;
     lss('door.user', me);
     renderWho();
-    st(el, 'ник изменён ✓ чаты и картинки переехали вместе с ним', 'ok');
-  }).catch(function () { b.disabled = false; st(el, 'связь оборвалась — попробуйте ещё раз', 'bad'); });
+    st(el, t("acc.nick.done", "nickname changed ✓ chats and pictures moved with it"), 'ok');
+  }).catch(function () { b.disabled = false; st(el, t("acc.err.conn2", "connection dropped — try again"), 'bad'); });
 };
 
 // ---------- пароль ----------
 $('bpass').onclick = function () {
   var p1 = $('p1').value, p2 = $('p2').value, el = $('pst');
-  if (p1.length < 6) { st(el, 'пароль короче 6 символов не годится', 'bad'); return; }
-  if (p1 !== p2) { st(el, 'пароли не совпадают', 'bad'); return; }
+  if (p1.length < 6) { st(el, t("acc.err.pass.short", "a password shorter than 6 characters will not do"), 'bad'); return; }
+  if (p1 !== p2) { st(el, t("acc.err.pass.same", "passwords do not match"), 'bad'); return; }
   var b = $('bpass');
-  b.disabled = true; st(el, 'меняю…', '');
+  b.disabled = true; st(el, t("acc.changing", "changing…"), '');
   api('/__acc/pass', { method: 'POST', body: JSON.stringify({ pass: p1, pass2: p2 }) }).then(function (r) {
     b.disabled = false;
     var j = r.json || {};
@@ -383,8 +383,8 @@ $('bpass').onclick = function () {
     myPass = true;
     renderWho();
     $('p1').value = ''; $('p2').value = '';
-    st(el, 'пароль изменён ✓ старые ссылки больше не работают', 'ok');
-  }).catch(function () { b.disabled = false; st(el, 'связь оборвалась — попробуйте ещё раз', 'bad'); });
+    st(el, t("acc.pass.done", "password changed ✓ old links no longer work"), 'ok');
+  }).catch(function () { b.disabled = false; st(el, t("acc.err.conn2", "connection dropped — try again"), 'bad'); });
 };
 
 // ---------- выход ----------
@@ -394,7 +394,7 @@ function forgetAll() {
 
 $('blogout').onclick = function () {
   var b = $('blogout');
-  b.disabled = true; st($('lst'), 'выхожу…', '');
+  b.disabled = true; st($('lst'), t("acc.exiting", "signing out…"), '');
   api('/__acc/logout', { method: 'POST', body: '{}' }).then(function () {
     forgetAll();
     location.replace(GH + '/accounts/');
@@ -419,17 +419,17 @@ $('bdelcancel').onclick = function () {
 };
 $('bdel').onclick = function () {
   var el = $('dst');
-  if (!confirm('Удалить учётную запись «' + me + '»? Входы закроются, диалоги уедут в корзину на сервере.')) return;
+  if (!confirm(t("acc.del.confirm1", "Delete account “") + me + t("acc.del.confirm2", "”? Sign-ins will close and dialogs go to the server recycle bin."))) return;
   var b = $('bdel');
-  b.disabled = true; st(el, 'удаляю…', '');
+  b.disabled = true; st(el, t("acc.deleting", "deleting…"), '');
   api('/__acc/delete', { method: 'POST', body: JSON.stringify({ pass: $('dp').value }) }).then(function (r) {
     b.disabled = false;
     var j = r.json || {};
     if (!r.ok || j.ok === false) { st(el, why(r, j), 'bad'); return; }
     forgetAll();
-    st(el, 'учётная запись удалена. Возвращаю на страницу входа…', 'ok');
+    st(el, t("acc.deleted", "account deleted. Returning to the sign-in page…"), 'ok');
     setTimeout(function () { location.replace(GH + '/accounts/'); }, 1500);
-  }).catch(function () { b.disabled = false; st(el, 'связь оборвалась — попробуйте ещё раз', 'bad'); });
+  }).catch(function () { b.disabled = false; st(el, t("acc.err.conn2", "connection dropped — try again"), 'bad'); });
 };
 
 boot();
