@@ -34,7 +34,8 @@
  *     data-home-href="/"           куда ведёт логотип
  *     data-account-href="/account/"  куда ведёт имя вошедшего
  *     data-signin-href="/accounts/"  куда ведёт «Войти»
- *     data-logo="/ui/logo.png"     какая картинка у логотипа
+ *     data-logo="/ui/logo.png"     какая картинка у логотипа (она же — значок вкладки:
+ *                                  страницы без своего rel="icon" получают /favicon.png)
  *
  * НОВЫЙ ЭЛЕМЕНТ ШАБЛОНА (пусть будет на всех страницах)
  *     добавить функцию рядом с themeNode()/langNode() и вставить её в renderBar();
@@ -454,12 +455,29 @@ function injectCss() {
   (document.head || document.getElementsByTagName('head')[0]).appendChild(l);
 }
 
+/* ---------- значок страницы (вкладка, закладки) ----------
+ * Одна картинка на весь сайт: site\favicon.png = site\ui\logo.png (32 x 32).
+ * Зовётся после разбора страницы: страница со своим значком (мини-приложения — icon.png)
+ * остаётся при своём, остальные получают знак сайта. */
+function injectIcon() {
+  if (document.querySelector('link[rel~="icon"]')) return;
+  var h = document.head || document.getElementsByTagName('head')[0];
+  if (!h) return;
+  var l = document.createElement('link');
+  l.rel = 'icon';
+  l.type = 'image/png';
+  l.setAttribute('sizes', '32x32');
+  l.href = '/favicon.png';          // знак сайта лежит в корне домена (site\favicon.png)
+  h.appendChild(l);
+}
+
 /* ---------- старт ---------- */
 injectCss();
 apply();   // тема должна стоять до разбора CSS ниже по странице
 
 document.addEventListener('DOMContentLoaded', function () {
   appliedLang = langNow();
+  injectIcon();   // только теперь видно, объявила ли страница свой значок
   mountBars();
   localize();
   apply();
